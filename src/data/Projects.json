@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Password Generator",
+    "path": "password-generator",
+    "des": "Developed with React, Next.js, and Tailwind CSS, this tool creates tailored passwords of varied lengths and complexities. Users can select letters-only, letters with numbers, letters with symbols, or a mix of all, ensuring strong, unique passwords for added security."
+  },
+  {
+    "name": "To-Do List",
+    "path": "todo-list",
+    "des": "A clean, efficient app for daily task management, built with React and Next.js for optimized performance. It enables users to add, edit, or delete tasks, using a component-based design for seamless organization and workflow."
+  },
+  {
+    "name": "Comment Section",
+    "path": "comment-section",
+    "des": "An interactive space for users to exchange opinions and discuss topics. This app enables posting comments, replying to others, and engaging in constructive dialogue on shared interests or tech insights."
+  },
+  {
+    "name": "Shooting Guns",
+    "path": "shooting-guns",
+    "des": "This project illustrates debouncing and throttling concepts through three unique gun models, each with its own firing mechanism. It visually demonstrates these essential programming techniques with engaging functionality."
+  },
+  {
+    "name": "Diwali Gifts",
+    "path": "diwali-gifts",
+    "des": "An app for assigning Diwali gifts to friends and family, ensuring each gift is unique. It includes options to shuffle, assign, or reset as desired, designed with React for smooth, interactive experiences that bring festive joy."
+  },
+  {
+    "name": "Tic Tac Toe Game",
+    "path": "tic-tac-toe",
+    "des": "This React-based Tic Tac Toe game features a user-friendly interface for two players. It handles win or tie scenarios smoothly, delivering a fun and classic gaming experience in a digital format."
+  },
+  {
+    "name": "Fetch Posts",
+    "path": "fetch-posts",
+    "des": "In this task, you'll learn how to fetch data and store it in component state variables. You’ll also develop skills in logical rendering, such as conditional rendering, and gain an understanding of how asynchronous code functions."
+  },
+  {
+    "name": "Diwali Lights",
+    "path": "diwali-lights",
+    "des": "Explore conditional rendering in depth, featuring options for Static, Blinking, and Fading Lights based on user selection. The user interface allows you to set the duration, and control buttons facilitate easy management of the light display. Additionally, the project effectively utilizes setInterval for dynamic lighting effects."
+  },
+  {
+    "name": "User Profile",
+    "path": "user-profile",
+    "des": "Created a simple User Profile Dashboard where you can display a user's information (e.g., name, email, profile picture), and have a feature to edit the user's details (name and email)."
+  },
+  {
+    "name": "Image Slider",
+    "path": "image-slider",
+    "des": "The ImageSlider component is an animated image carousel using Framer Motion, cycling through images with auto-slide, manual navigation, and preloaded images for seamless transitions."
+  },
+  {
+    "name": "Calculator",
+    "path": "calculator",
+    "des": "A responsive React-based calculator with real-time calculation display, clear functionality, and interactive buttons. Designed with a modern UI, it offers smooth transitions and enhanced user interaction."
+  },
+  {
+    "name": "Star Rating",
+    "path": "start-rating",
+    "des": "This React code implements a star rating component with interactive stars and a range input slider, allowing users to select a rating dynamically, updating the display in real-time."
+  },
+  {
+    "name": "Drag The Boll",
+    "path": "drag-ball",
+    "des": "The DragBall project is an interactive React application where users can drag a ball within a container. It uses useRef and useState for dynamic positioning and responsive user interaction."
+  }
+]

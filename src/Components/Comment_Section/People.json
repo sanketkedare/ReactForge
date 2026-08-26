@@ -1,52 +1,52 @@
 [
-    {
-        "id": 1,
-        "name": "Aarav Mehta",
-        "occupation": "Software Engineer"
-    },
-    {
-        "id": 2,
-        "name": "Isha Verma",
-        "occupation": "Data Scientist"
-    },
-    {
-        "id": 3,
-        "name": "Rohan Nair",
-        "occupation": "Cloud Architect"
-    },
-    {
-        "id": 4,
-        "name": "Priya Gupta",
-        "occupation": "Full Stack Developer"
-    },
-    {
-        "id": 5,
-        "name": "Vikram Desai",
-        "occupation": "Cybersecurity Analyst"
-    },
-    {
-        "id": 6,
-        "name": "Kavya Sharma",
-        "occupation": "UX/UI Designer"
-    },
-    {
-        "id": 7,
-        "name": "Rahul Malhotra",
-        "occupation": "AI Researcher"
-    },
-    {
-        "id": 8,
-        "name": "Sneha Patel",
-        "occupation": "DevOps Engineer"
-    },
-    {
-        "id": 9,
-        "name": "Amit Choudhury",
-        "occupation": "Blockchain Developer"
-    },
-    {
-        "id": 10,
-        "name": "Sanya Kapoor",
-        "occupation": "Mobile App Developer"
-    }
+  {
+    "id": 1,
+    "name": "Aarav Mehta",
+    "occupation": "Software Engineer"
+  },
+  {
+    "id": 2,
+    "name": "Isha Verma",
+    "occupation": "Data Scientist"
+  },
+  {
+    "id": 3,
+    "name": "Rohan Nair",
+    "occupation": "Cloud Architect"
+  },
+  {
+    "id": 4,
+    "name": "Priya Gupta",
+    "occupation": "Full Stack Developer"
+  },
+  {
+    "id": 5,
+    "name": "Vikram Desai",
+    "occupation": "Cybersecurity Analyst"
+  },
+  {
+    "id": 6,
+    "name": "Kavya Sharma",
+    "occupation": "UX/UI Designer"
+  },
+  {
+    "id": 7,
+    "name": "Rahul Malhotra",
+    "occupation": "AI Researcher"
+  },
+  {
+    "id": 8,
+    "name": "Sneha Patel",
+    "occupation": "DevOps Engineer"
+  },
+  {
+    "id": 9,
+    "name": "Amit Choudhury",
+    "occupation": "Blockchain Developer"
+  },
+  {
+    "id": 10,
+    "name": "Sanya Kapoor",
+    "occupation": "Mobile App Developer"
+  }
 ]
