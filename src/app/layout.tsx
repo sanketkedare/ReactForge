@@ -4,9 +4,9 @@ import TheamContextComponent from "@/context/TheamContextComponent";
 import ProfilerProvider from "@/context/ProfilerContext";
 
 export const metadata: Metadata = {
-  title: "React Machine Coding Interview Hub | Frontend Coding Round Prep",
+  title: "ReactForge — 100 Hands-On React Machine Coding Challenges",
   description:
-    "Master frontend developer machine coding rounds. Practice 19 frequently asked React interview tasks with live problem statements, evaluation criteria, and working solutions.",
+    "Master frontend developer machine coding rounds with ReactForge. 100 practical hands-on tasks, live interactive workbenches, AI coaching, and interview dossiers.",
   icons: {
     icon: "/react.svg",
   },

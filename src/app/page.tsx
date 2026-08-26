@@ -182,9 +182,9 @@ export default function CleanStudentHomePage() {
               variants={itemVariants}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-600/30 bg-amber-950/40 text-amber-200 text-xs font-sans font-medium shadow-sm backdrop-blur-md"
             >
-              <span>✨</span>
-              <span>Frontend Developer Practice Lab • {TOTAL_COUNT} Tasks</span>
-              <span>✨</span>
+              <span>⚡</span>
+              <span>ReactForge • {TOTAL_COUNT} Machine Coding Challenges</span>
+              <span>⚡</span>
             </motion.div>
 
             {/* Main Headline */}

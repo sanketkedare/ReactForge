@@ -51,7 +51,7 @@ export const ProjectPageWrapper: React.FC<ProjectPageWrapperProps> = ({ children
       <footer className="border-t border-slate-800/80 bg-[#07090e] py-8 px-6 lg:px-12 text-center text-xs text-slate-500 font-sans transition-colors">
         <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-slate-400">
-            React Lab — Machine Coding Interview Preparation ({LEARNING_PROJECTS.length} Tasks)
+            ReactForge — Frontend Machine Coding Studio ({LEARNING_PROJECTS.length} Tasks)
           </div>
           <div className="flex items-center gap-4 text-slate-500 font-mono text-[11px]">
             <span>Next.js 16.3.2</span>

@@ -1,23 +1,23 @@
-# 🚀 React Architecture & Performance Studio
-> **Senior/Staff-Level Open-Source Benchmarking Engine & Telemetry Laboratory**  
+# ⚡ ReactForge
+> **100 Hands-On React Machine Coding Challenges & Telemetry Laboratory**  
 > **Author**: Sanket Kedare  
-> **Framework**: Next.js 16.3.2 (App Router, Turbopack) • React 19 • TypeScript 5.6 (`strict: true`)  
+> **Framework**: Next.js 16.3.2 (App Router) • React 19 • TypeScript 5.6 (`strict: true`)  
 > **Default Port**: `3002`
 
 ---
 
 ## 🌟 Executive Overview
 
-**React Architecture & Performance Studio** transforms traditional toy practice tasks into a production-grade, interactive developer laboratory and benchmarking platform. Rather than merely showing that code runs, the platform **measures, profiles, visualizes, and stress-tests React architectural trade-offs in real time**.
+**ReactForge** is a production-grade interactive developer workbench and machine coding interview preparation platform. It contains **100 curated hands-on coding challenges** spanning Junior (SDE-1), Mid-Level (SDE-2), and Senior / System Design tiers with live state engines, real-time telemetry, AI interview coaching, and dynamic source code inspection.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        REACT ARCHITECTURE & PERFORMANCE STUDIO                         │
+│                                       REACTFORGE                                       │
 ├───────────────────────────────┬───────────────────────────────┬────────────────────────┤
-│     COMPLEX ARCHITECTURE      │     REAL-TIME TELEMETRY       │   INTERACTIVE STUDIO   │
-│  • 100k Virtualization        │  • React.Profiler metrics     │  • Command Palette ⌘K  │
-│  • Concurrency & RAF stream   │  • Re-render flash counter    │  • Chaos simulator     │
-│  • State engine shootout      │  • FPS & JS Heap estimations  │  • Pattern rationale   │
+│     100 PRACTICE TRACKS       │     AI INTERVIEW COACH        │    DYNAMIC CODE LAB    │
+│  • SDE-1 / Junior (40 Tasks)  │  • Progressive Hints          │  • Live File Tree      │
+│  • SDE-2 / Mid-Level (35)     │  • Code Review & Grading      │  • Multi-File Tabs     │
+│  • Senior / Arch (25 Tasks)   │  • 0-Token Interceptor        │  • Syntax Highlighting │
 └───────────────────────────────┴───────────────────────────────┴────────────────────────┘
 ```
 

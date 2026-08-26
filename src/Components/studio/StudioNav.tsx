@@ -50,10 +50,10 @@ export const StudioNav: React.FC = () => {
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2.5 group">
               <span className="text-xl group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300 select-none">
-                🪄
+                ⚡
               </span>
-              <span className="text-lg font-normal tracking-tight text-amber-50 group-hover:text-amber-300 transition-colors">
-                React Lab
+              <span className="text-lg font-bold tracking-tight text-amber-50 group-hover:text-amber-300 transition-colors font-sans">
+                ReactForge
               </span>
             </Link>
 
@@ -158,10 +158,10 @@ export const StudioNav: React.FC = () => {
               className="flex items-center gap-2.5 group"
             >
               <span className="text-xl group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300 select-none">
-                🪄
+                ⚡
               </span>
-              <span className="text-lg font-normal tracking-tight text-amber-50 group-hover:text-amber-300 transition-colors">
-                React Lab
+              <span className="text-lg font-bold tracking-tight text-amber-50 group-hover:text-amber-300 transition-colors font-sans">
+                ReactForge
               </span>
             </Link>
 
