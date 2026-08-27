@@ -16,7 +16,7 @@
     <a href="https://www.sanketkedare.com">
       <img src="https://img.shields.io/badge/👨‍💻_Architect-Sanket_Kedare-06B6D4?style=for-the-badge" alt="Sanket Kedare" />
     </a>
-    <a href="https://github.com/sanketkedare/React-Tasks">
+    <a href="https://github.com/sanketkedare/ReactForge">
       <img src="https://img.shields.io/badge/📦_Challenges-100_Hands--On_Tasks-10B981?style=for-the-badge" alt="100 Tasks" />
     </a>
   </p>
@@ -240,7 +240,7 @@ ReactForge embeds a dedicated **AI Interviewer & Architecture Coach** powered by
 ## 🛠️ Tech Stack & Architecture
 
 ```
-React-Tasks/
+ReactForge/
 ├── public/                       # High-res brand assets, icons & banners
 ├── src/
 │   ├── app/                      # Next.js 16.3.2 App Router (SSG / SSR / API)
@@ -280,8 +280,8 @@ React-Tasks/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/sanketkedare/React-Tasks.git
-cd React-Tasks
+git clone https://github.com/sanketkedare/ReactForge.git
+cd ReactForge
 ```
 
 ### 2. Install Dependencies

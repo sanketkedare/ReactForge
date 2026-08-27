@@ -102,7 +102,7 @@ export const GlobalFooter: React.FC = () => {
             {/* Social Links */}
             <div className="flex items-center gap-2 pt-1">
               <a
-                href="https://github.com/sanketkedare/React-Tasks"
+                href="https://github.com/sanketkedare/ReactForge"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition-all shadow-sm"

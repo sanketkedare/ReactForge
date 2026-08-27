@@ -144,7 +144,7 @@ export const StudioNav: React.FC = () => {
             </button>
 
             <Link
-              href="https://github.com/sanketkedare/React-Tasks"
+              href="https://github.com/sanketkedare/ReactForge"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full hover:bg-slate-800/80 text-slate-400 hover:text-white transition-all hover:scale-110"
@@ -258,7 +258,7 @@ export const StudioNav: React.FC = () => {
             </button>
 
             <Link
-              href="https://github.com/sanketkedare/React-Tasks"
+              href="https://github.com/sanketkedare/ReactForge"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full hover:bg-slate-800/80 text-slate-400 hover:text-white transition-all hover:scale-110"

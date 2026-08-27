@@ -142,7 +142,7 @@ const jsonLd = {
         url: "https://www.sanketkedare.com",
       },
       sameAs: [
-        "https://github.com/sanketkedare/React-Tasks",
+        "https://github.com/sanketkedare/ReactForge",
         "https://www.sanketkedare.com",
         "https://www.linkedin.com/in/sanket-kedare-dev/",
       ],
