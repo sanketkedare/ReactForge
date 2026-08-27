@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import StudioNav from "@/components/studio/StudioNav";
 import AIInterviewDrawer from "@/components/ai/AIInterviewDrawer";
+import GlobalFooter from "@/components/common/GlobalFooter";
 import { LEARNING_PROJECTS, StudentLevel, LearningProject } from "@/data/learningProjects";
 
 const BEGINNER_COUNT = LEARNING_PROJECTS.filter((p) => p.level === "beginner").length;
@@ -392,21 +393,8 @@ export default function DedicatedTasksPage() {
         )}
       </main>
 
-      {/* Clean Footer */}
-      <footer className="w-full border-t border-slate-800/80 py-10 px-6 text-center text-xs font-sans text-slate-500">
-        <div className="w-[92%] lg:w-[80%] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-serif italic text-sm text-slate-300">
-            &ldquo;Code is poetry written for machines to execute and humans to understand.&rdquo;
-          </p>
-          <div className="flex items-center gap-3 text-slate-400 text-[11px]">
-            <span>React Practice Lab</span>
-            <span>•</span>
-            <span>{TOTAL_COUNT} Projects</span>
-            <span>•</span>
-            <span>Port 3002</span>
-          </div>
-        </div>
-      </footer>
+      {/* Professional Studio Global Footer */}
+      <GlobalFooter />
 
       {/* Global AI Interview Assistant */}
       <AIInterviewDrawer

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
   Search,
@@ -17,6 +18,7 @@ import { SiJavascript, SiReact } from "react-icons/si";
 import StudioNav from "@/components/studio/StudioNav";
 import AIInterviewDrawer from "@/components/ai/AIInterviewDrawer";
 import HomeAIChat from "@/components/ai/HomeAIChat";
+import GlobalFooter from "@/components/common/GlobalFooter";
 import { LEARNING_PROJECTS, StudentLevel, LearningProject } from "@/data/learningProjects";
 
 // Animation Variants
@@ -180,11 +182,20 @@ export default function CleanStudentHomePage() {
             {/* Top Badge */}
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-600/30 bg-amber-950/40 text-amber-200 text-xs font-sans font-medium shadow-sm backdrop-blur-md"
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-amber-500/40 bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 text-amber-200 text-xs font-sans font-medium shadow-[0_0_20px_rgba(245,158,11,0.15)] backdrop-blur-md"
             >
-              <span>⚡</span>
-              <span>ReactForge • {TOTAL_COUNT} Machine Coding Challenges</span>
-              <span>⚡</span>
+              <Image
+                src="/ReactForge_Icon.png"
+                alt="ReactForge"
+                width={20}
+                height={20}
+                className="w-5 h-5 object-contain drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]"
+              />
+              <span className="font-bold text-white">
+                React<span className="text-amber-400">Forge</span>
+              </span>
+              <span className="text-amber-500/80">•</span>
+              <span>{TOTAL_COUNT} Machine Coding Challenges</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -552,21 +563,8 @@ export default function CleanStudentHomePage() {
         </div>
       </main>
 
-      {/* Clean Footer */}
-      <footer className="w-full border-t border-slate-800/80 py-10 px-6 text-center text-xs font-sans text-slate-500">
-        <div className="w-[92%] lg:w-[80%] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-serif italic text-sm text-slate-300">
-            &ldquo;Code is poetry written for machines to execute and humans to understand.&rdquo;
-          </p>
-          <div className="flex items-center gap-3 text-slate-400 text-[11px]">
-            <span>React Practice Lab</span>
-            <span>•</span>
-            <span>{TOTAL_COUNT} Hands-On Projects</span>
-            <span>•</span>
-            <span>Port 3002</span>
-          </div>
-        </div>
-      </footer>
+      {/* Professional Studio Global Footer */}
+      <GlobalFooter />
 
       {/* Global AI Interview Assistant on Home Page */}
       <AIInterviewDrawer

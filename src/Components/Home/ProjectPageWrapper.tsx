@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import StudioNav from "@/components/studio/StudioNav";
 import AIInterviewDrawer from "@/components/ai/AIInterviewDrawer";
 import ProjectCodeSection from "@/components/common/ProjectCodeSection";
+import GlobalFooter from "@/components/common/GlobalFooter";
 import { LEARNING_PROJECTS } from "@/data/learningProjects";
 
 interface ProjectPageWrapperProps {
@@ -48,22 +49,7 @@ export const ProjectPageWrapper: React.FC<ProjectPageWrapperProps> = ({ children
         concepts={currentProject?.skills || []}
       />
 
-      <footer className="border-t border-slate-800/80 bg-[#07090e] py-8 px-6 lg:px-12 text-center text-xs text-slate-500 font-sans transition-colors">
-        <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-slate-400">
-            ReactForge — Frontend Machine Coding Studio ({LEARNING_PROJECTS.length} Tasks)
-          </div>
-          <div className="flex items-center gap-4 text-slate-500 font-mono text-[11px]">
-            <span>Next.js 16.3.2</span>
-            <span>•</span>
-            <span>React 19</span>
-            <span>•</span>
-            <span>Gemini AI Integrated</span>
-            <span>•</span>
-            <span>Port 3002</span>
-          </div>
-        </div>
-      </footer>
+      <GlobalFooter />
     </div>
   );
 };

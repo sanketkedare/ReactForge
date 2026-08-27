@@ -42,3 +42,10 @@ html::-webkit-scrollbar {
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* Hide top navbar & bottom-right floating AI chat when in full screen */
+html[data-ai-fullscreen="true"] header,
+html[data-ai-fullscreen="true"] .fixed.bottom-6.right-6 {
+  display: none !important;
+  pointer-events: none !important;
+}

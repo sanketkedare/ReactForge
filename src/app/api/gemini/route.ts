@@ -108,7 +108,7 @@ Provide direct, concise, high-density responses with structured markdown, bullet
               ],
               generationConfig: {
                 temperature: 0.7,
-                maxOutputTokens: 1024,
+                maxOutputTokens: 3000,
               },
             }),
           }

@@ -3,8 +3,20 @@ import Comment from "@/components/Comment_Section/Comment";
 import ProjectHeader from "@/components/common/ProjectHeader";
 
 export const metadata: Metadata = {
-  title: "Interactive Comment System | React Tasks",
-  description: "User switching, article reading, likes/dislikes, and threaded comments.",
+  title: "Nested Comment System — Mid-Level SDE-2 React Challenge",
+  description: "Threaded comment system in React 19 with user switching, recursive nesting, and upvote/downvote state.",
+  alternates: {
+    canonical: "https://reactforge.sanketkedare.com/comment-section",
+  },
+  openGraph: {
+    title: "Nested Comment System — Mid-Level SDE-2 React Challenge | ReactForge",
+    description: "Threaded comment system in React 19 with user switching, recursive nesting, and upvote/downvote state.",
+    images: [{ url: "/ReactForge.png", width: 1200, height: 630, alt: "Nested Comment System — ReactForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/ReactForge.png"],
+  },
 };
 
 export default function CommentSectionPage() {

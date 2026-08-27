@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Search, Github, BookOpen, Layers, Sparkles } from "lucide-react";
 import CommandPalette from "./CommandPalette";
@@ -12,15 +13,31 @@ export const StudioNav: React.FC = () => {
   const isHomePage = pathname === "/";
   const [isCommandOpen, setIsCommandOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [isAIFullScreen, setIsAIFullScreen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
     };
 
+    const handleAIFullscreen = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isFullScreen: boolean }>;
+      setIsAIFullScreen(!!customEvent.detail?.isFullScreen);
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("ai-fullscreen-change", handleAIFullscreen);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("ai-fullscreen-change", handleAIFullscreen);
+    };
   }, []);
+
+  // When AI FullScreen is active, hide the entire navbar completely
+  if (isAIFullScreen) {
+    return null;
+  }
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (pathname === "/") {
@@ -49,11 +66,18 @@ export const StudioNav: React.FC = () => {
           {/* Left: Brand Logo & Back to Hub */}
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <span className="text-xl group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300 select-none">
-                ⚡
-              </span>
-              <span className="text-lg font-bold tracking-tight text-amber-50 group-hover:text-amber-300 transition-colors font-sans">
-                ReactForge
+              <div className="relative w-8 h-8 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                <Image
+                  src="/ReactForge_Icon.png"
+                  alt="ReactForge"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                  priority
+                />
+              </div>
+              <span className="text-lg font-black tracking-tight text-white font-sans">
+                React<span className="text-amber-400">Forge</span>
               </span>
             </Link>
 
@@ -157,11 +181,18 @@ export const StudioNav: React.FC = () => {
               href="/"
               className="flex items-center gap-2.5 group"
             >
-              <span className="text-xl group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300 select-none">
-                ⚡
-              </span>
-              <span className="text-lg font-bold tracking-tight text-amber-50 group-hover:text-amber-300 transition-colors font-sans">
-                ReactForge
+              <div className="relative w-8 h-8 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                <Image
+                  src="/ReactForge_Icon.png"
+                  alt="ReactForge"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                  priority
+                />
+              </div>
+              <span className="text-lg font-black tracking-tight text-white font-sans">
+                React<span className="text-amber-400">Forge</span>
               </span>
             </Link>
 

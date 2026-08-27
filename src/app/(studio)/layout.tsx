@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import StudioNav from "@/components/studio/StudioNav";
+import GlobalFooter from "@/components/common/GlobalFooter";
 import { LEARNING_PROJECTS } from "@/data/learningProjects";
 
 export default function StudioLayout({
@@ -21,21 +22,7 @@ export default function StudioLayout({
       <main className="flex-1 w-full relative z-10 pt-24 pb-12">{children}</main>
 
       {/* Global Studio Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#07090e] py-8 px-6 lg:px-12 text-center text-xs text-slate-500 font-sans relative z-10 transition-colors">
-        <div className="w-[92%] lg:w-[80%] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-slate-400">
-            React Lab — {LEARNING_PROJECTS.length} Practical Projects for{" "}
-            <span className="text-slate-200 font-semibold">Developers of All Levels</span>
-          </div>
-          <div className="flex items-center gap-4 text-slate-500 font-mono text-[11px]">
-            <span>Next.js 16.3.2</span>
-            <span>•</span>
-            <span>React 19</span>
-            <span>•</span>
-            <span>Port 3002</span>
-          </div>
-        </div>
-      </footer>
+      <GlobalFooter />
     </div>
   );
 }

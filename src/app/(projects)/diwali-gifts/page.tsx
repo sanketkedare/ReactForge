@@ -3,8 +3,20 @@ import DiwaliGifts from "@/components/Diwali_Gifts/DiwaliGifts";
 import ProjectHeader from "@/components/common/ProjectHeader";
 
 export const metadata: Metadata = {
-  title: "Diwali Gift Shuffler | React Tasks",
-  description: "Gift allocation and array shuffling algorithm visualization.",
+  title: "Diwali Gift Shuffler & Allocator — Mid-Level SDE-2 React Challenge",
+  description: "Randomized Fisher-Yates array shuffling algorithm visualization and gift distribution in React 19.",
+  alternates: {
+    canonical: "https://reactforge.sanketkedare.com/diwali-gifts",
+  },
+  openGraph: {
+    title: "Diwali Gift Shuffler & Allocator — Mid-Level SDE-2 React Challenge | ReactForge",
+    description: "Randomized Fisher-Yates array shuffling algorithm visualization and gift distribution in React 19.",
+    images: [{ url: "/ReactForge.png", width: 1200, height: 630, alt: "Diwali Gift Shuffler — ReactForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/ReactForge.png"],
+  },
 };
 
 export default function DiwaliGiftsPage() {
