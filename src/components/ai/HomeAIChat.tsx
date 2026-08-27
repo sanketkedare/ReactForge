@@ -30,6 +30,14 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { getLocalGreetingResponse } from "@/lib/aiGreetings";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  getGuestAiUsageCount,
+  incrementGuestAiUsage,
+  isGuestAiLimitReached,
+  getGuestAiRemaining,
+  GUEST_AI_MAX_LIMIT,
+} from "@/lib/guestAiQuota";
 
 interface ChatMessage {
   id: string;
@@ -40,12 +48,15 @@ interface ChatMessage {
 }
 
 export const HomeAIChat: React.FC = () => {
+  const { isAuthenticated, openAuthModal } = useAuth();
+  const [guestRemaining, setGuestRemaining] = useState<number>(3);
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "intro",
       role: "assistant",
       text: `👋 **Welcome to the ReactForge AI Interview Coach!**\n\nI can help you build a personalized study roadmap from our **100 tasks**, review React 19 architectural patterns, explain time/space complexities, or simulate FAANG frontend system design interviews.\n\nTry clicking any quick question below or type your own question!`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "Just now",
     },
   ]);
 
@@ -64,8 +75,15 @@ export const HomeAIChat: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
+    setGuestRemaining(getGuestAiRemaining());
     const saved = localStorage.getItem("REACT_LAB_GEMINI_API_KEY");
     if (saved) setUserApiKey(saved);
+
+    const handleQuotaChange = () => {
+      setGuestRemaining(getGuestAiRemaining());
+    };
+    window.addEventListener("guest-ai-quota-change", handleQuotaChange);
+    return () => window.removeEventListener("guest-ai-quota-change", handleQuotaChange);
   }, []);
 
   useEffect(() => {
@@ -126,7 +144,7 @@ export const HomeAIChat: React.FC = () => {
         id: "intro",
         role: "assistant",
         text: `👋 **Welcome to the ReactForge AI Interview Coach!**\n\nI can help you build a personalized study roadmap from our **100 tasks**, review React 19 architectural patterns, explain time/space complexities, or simulate FAANG frontend system design interviews.\n\nTry clicking any quick question below or type your own question!`,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        timestamp: "Just now",
       },
     ]);
   };
@@ -175,13 +193,34 @@ export const HomeAIChat: React.FC = () => {
       id: Date.now().toString(),
       role: "user",
       text: displayUserText,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "Just now",
       promptQuery: actualPromptToSend,
     };
 
     setMessages((prev) => [...prev, userMessage]);
     if (!queryText) setInput("");
     setAttachedFile(null);
+
+    // GUEST LIMIT INTERCEPTOR: Unauthenticated users are allowed max 3 AI chats
+    if (!isAuthenticated) {
+      if (isGuestAiLimitReached()) {
+        setTimeout(() => {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: (Date.now() + 1).toString(),
+              role: "assistant",
+              text: `🔒 **Free Guest Limit Reached (${GUEST_AI_MAX_LIMIT}/${GUEST_AI_MAX_LIMIT} chats used)**\n\nYou've used your 3 free questions on this device. Please **Sign In** to unlock **Unlimited AI Coaching**, customized 7-day study plans, and automatic progress tracking!`,
+              timestamp: "Just now",
+            },
+          ]);
+        }, 150);
+        openAuthModal("login");
+        return;
+      }
+      incrementGuestAiUsage();
+      setGuestRemaining(getGuestAiRemaining());
+    }
 
     // TOKEN SAVINGS INTERCEPTOR: Answer simple casual greetings locally without API calls
     const localGreeting = !attachedFile ? getLocalGreetingResponse(textToSend, "React Machine Coding Hub") : null;
@@ -193,7 +232,7 @@ export const HomeAIChat: React.FC = () => {
             id: (Date.now() + 1).toString(),
             role: "assistant",
             text: localGreeting,
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            timestamp: "Just now",
             promptQuery: textToSend,
           },
         ]);
@@ -322,6 +361,23 @@ export const HomeAIChat: React.FC = () => {
             <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800/80 font-mono font-bold">
               Online
             </span>
+
+            {isAuthenticated ? (
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-semibold hidden sm:flex items-center gap-1">
+                ✨ Unlimited AI
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => openAuthModal("login")}
+                className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-900/90 text-amber-400 border border-amber-500/30 hover:border-amber-400 font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer"
+                title="Guest mode: 3 free chats allowed. Click to Sign In for unlimited access."
+              >
+                <span>⚡ Guest: {guestRemaining}/{GUEST_AI_MAX_LIMIT} Left</span>
+                <span className="text-slate-500 hidden md:inline">• Sign In</span>
+              </button>
+            )}
+
             {isFullScreen && (
               <span className="hidden sm:inline-block text-[10px] px-2.5 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-800/60 font-mono">
                 Press Esc to exit
@@ -536,7 +592,7 @@ export const HomeAIChat: React.FC = () => {
                     : "border-slate-800/60 text-slate-400"
                 }`}
               >
-                <span>{msg.timestamp}</span>
+                <span suppressHydrationWarning>{msg.timestamp}</span>
 
                 <div className="flex items-center gap-2">
                   {msg.promptQuery && (

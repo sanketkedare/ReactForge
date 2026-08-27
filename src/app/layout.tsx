@@ -150,6 +150,10 @@ const jsonLd = {
   ],
 };
 
+import { AuthProvider } from "@/context/AuthContext";
+import AuthModal from "@/components/auth/AuthModal";
+import RegistrationOnboardingModal from "@/components/auth/RegistrationOnboardingModal";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -167,11 +171,15 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="bg-[#07090e] text-slate-100 antialiased">
-        <TheamContextComponent>
-          <ProfilerProvider>
-            {children}
-          </ProfilerProvider>
-        </TheamContextComponent>
+        <AuthProvider>
+          <TheamContextComponent>
+            <ProfilerProvider>
+              {children}
+              <AuthModal />
+              <RegistrationOnboardingModal />
+            </ProfilerProvider>
+          </TheamContextComponent>
+        </AuthProvider>
       </body>
     </html>
   );

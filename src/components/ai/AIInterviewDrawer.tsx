@@ -33,6 +33,14 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { getLocalGreetingResponse } from "@/lib/aiGreetings";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  getGuestAiUsageCount,
+  incrementGuestAiUsage,
+  isGuestAiLimitReached,
+  getGuestAiRemaining,
+  GUEST_AI_MAX_LIMIT,
+} from "@/lib/guestAiQuota";
 
 interface Message {
   id: string;
@@ -58,6 +66,9 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
   concepts = [],
   codeSnippet,
 }) => {
+  const { isAuthenticated, openAuthModal } = useAuth();
+  const [guestRemaining, setGuestRemaining] = useState<number>(3);
+
   const isGlobalHub =
     taskTitle.toLowerCase().includes("lab") ||
     taskTitle.toLowerCase().includes("directory") ||
@@ -74,7 +85,7 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
       text: isGlobalHub
         ? `👋 **Hi! I'm your AI Interview Coach for the React Machine Coding Lab.**\n\nI can help you build a personalized study roadmap from our **100 tasks**, review React 19 architectural patterns, explain time/space complexities, or simulate FAANG frontend system design interviews.\n\nClick any quick option below or ask me a specific question!`
         : `👋 **Hi! I'm your AI Interview Coach for "${taskTitle}".**\n\nI can help you ace this specific machine coding challenge with progressive hints, code reviews, or rapid-fire interview curveballs.\n\nClick any quick option below or ask me a specific question!`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "Just now",
     },
   ]);
 
@@ -94,6 +105,12 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
 
   useEffect(() => {
     setMounted(true);
+    setGuestRemaining(getGuestAiRemaining());
+    const handleQuotaChange = () => {
+      setGuestRemaining(getGuestAiRemaining());
+    };
+    window.addEventListener("guest-ai-quota-change", handleQuotaChange);
+    return () => window.removeEventListener("guest-ai-quota-change", handleQuotaChange);
   }, []);
 
   // Full Screen keyboard & scroll lock handling
@@ -233,13 +250,34 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
       id: Date.now().toString(),
       role: "user",
       text: queryToSend,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "Just now",
       promptQuery: queryToSend,
       mode,
     };
 
     setMessages((prev) => [...prev, userMsg]);
     if (!customPrompt) setInputQuery("");
+
+    // GUEST LIMIT INTERCEPTOR: Unauthenticated users are allowed max 3 AI chats
+    if (!isAuthenticated) {
+      if (isGuestAiLimitReached()) {
+        setTimeout(() => {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: (Date.now() + 1).toString(),
+              role: "assistant",
+              text: `🔒 **Free Guest Limit Reached (${GUEST_AI_MAX_LIMIT}/${GUEST_AI_MAX_LIMIT} chats used)**\n\nYou've used your 3 free questions on this device. Please **Sign In** with Google, GitHub, or Email to unlock **Unlimited AI Coaching**, interview hints, and progress tracking!`,
+              timestamp: "Just now",
+            },
+          ]);
+        }, 150);
+        openAuthModal("login");
+        return;
+      }
+      incrementGuestAiUsage();
+      setGuestRemaining(getGuestAiRemaining());
+    }
 
     // TOKEN SAVINGS INTERCEPTOR: Answer simple casual greetings locally without API calls
     const localGreeting = getLocalGreetingResponse(queryToSend, taskTitle);
@@ -251,7 +289,7 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
             id: (Date.now() + 1).toString(),
             role: "assistant",
             text: localGreeting,
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            timestamp: "Just now",
             promptQuery: queryToSend,
             mode,
           },
@@ -458,6 +496,21 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono font-bold flex-shrink-0">
                       Online
                     </span>
+
+                    {isAuthenticated ? (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-semibold hidden sm:inline-flex items-center gap-1 flex-shrink-0">
+                        ✨ Unlimited
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => openAuthModal("login")}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-slate-950 text-amber-400 border border-amber-500/30 hover:border-amber-400 font-mono font-semibold flex items-center gap-1 flex-shrink-0 cursor-pointer"
+                        title="3 free guest chats allowed. Click to Sign In for unlimited access."
+                      >
+                        <span>⚡ Guest: {guestRemaining}/{GUEST_AI_MAX_LIMIT} Left</span>
+                      </button>
+                    )}
                   </div>
                   <p className="text-[11px] text-slate-400 font-light truncate max-w-[260px] mt-0.5">
                     {isGlobalHub ? "100 Tasks Curriculum" : `Task: ${taskTitle}`}
@@ -653,7 +706,7 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
                             : "border-slate-800/60 text-slate-400"
                         }`}
                       >
-                        <span>{msg.timestamp}</span>
+                        <span suppressHydrationWarning>{msg.timestamp}</span>
 
                         <div className="flex items-center gap-2">
                           {msg.promptQuery && (

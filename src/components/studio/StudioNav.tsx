@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Search, Github, BookOpen, Layers, Sparkles } from "lucide-react";
 import CommandPalette from "./CommandPalette";
 import { LEARNING_PROJECTS } from "@/data/learningProjects";
+import UserMenu from "@/components/auth/UserMenu";
 
 export const StudioNav: React.FC = () => {
   const pathname = usePathname();
@@ -143,6 +144,8 @@ export const StudioNav: React.FC = () => {
               </kbd>
             </button>
 
+            <UserMenu />
+
             <Link
               href="https://github.com/sanketkedare/ReactForge"
               target="_blank"
@@ -256,6 +259,8 @@ export const StudioNav: React.FC = () => {
                 ⌘K
               </kbd>
             </button>
+
+            <UserMenu />
 
             <Link
               href="https://github.com/sanketkedare/ReactForge"
