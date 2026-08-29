@@ -152,15 +152,24 @@ export default function ProfilePage() {
               {user.photoURL ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={user.photoURL}
+                  src={mongoUser?.photoURL || user.photoURL}
                   alt={displayName}
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                    if (e.currentTarget.nextElementSibling) {
+                      (e.currentTarget.nextElementSibling as HTMLElement).style.display = "flex";
+                    }
+                  }}
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-amber-500/40 shadow-lg shadow-amber-500/10"
                 />
-              ) : (
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 text-slate-950 font-black text-3xl flex items-center justify-center border-2 border-amber-400 shadow-lg shadow-amber-500/10">
-                  {displayName.charAt(0).toUpperCase()}
-                </div>
-              )}
+              ) : null}
+              <div
+                style={{ display: user.photoURL ? "none" : "flex" }}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 text-slate-950 font-black text-3xl items-center justify-center border-2 border-amber-400 shadow-lg shadow-amber-500/10"
+              >
+                {displayName.charAt(0).toUpperCase()}
+              </div>
 
               <div>
                 <div className="flex items-center gap-2.5 flex-wrap">

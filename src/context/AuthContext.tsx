@@ -85,6 +85,7 @@ interface AuthContextType {
   completeRegistration: (
     data: CompleteRegistrationData
   ) => Promise<{ success: boolean; error?: string }>;
+  dismissOnboarding: () => void;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
   // Progress & Bookmarks
@@ -198,12 +199,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return { success: false, error: res.error || "Invalid credentials" };
   };
 
+  // Onboarding dismissal state (persisted to localStorage)
+  const [onboardingDismissed, setOnboardingDismissed] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("reactforge_onboarding_dismissed") === "true";
+    }
+    return false;
+  });
+
+  const dismissOnboarding = () => {
+    setOnboardingDismissed(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("reactforge_onboarding_dismissed", "true");
+    }
+    if (mongoUser) {
+      setMongoUser((prev) => (prev ? { ...prev, isRegistrationComplete: true } : prev));
+    }
+  };
+
   // Email Register
   const registerWithEmailPassword = async (
     email: string,
     pass: string,
     name: string
   ) => {
+    // Reset dismissal so a new registrant sees onboarding
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("reactforge_onboarding_dismissed");
+    }
+    setOnboardingDismissed(false);
+
     const res = await registerWithEmail(email, pass, name);
     if (res.user) {
       closeAuthModal();
@@ -239,6 +264,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setMongoUser(json.user);
       }
 
+      dismissOnboarding();
       return { success: true };
     } catch (e: any) {
       console.error("Complete registration network error:", e);
@@ -380,8 +406,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  // Only show the onboarding modal when:
+  // 1. User is authenticated
+  // 2. User has NOT dismissed onboarding in this browser
+  // 3. mongoUser has fully loaded from MongoDB (not null)
+  // 4. isRegistrationComplete is explicitly false
+  // 5. It's not an offline fallback (DB was unreachable)
   const requiresOnboarding = Boolean(
-    user && (!mongoUser || mongoUser.isRegistrationComplete === false)
+    user &&
+    !onboardingDismissed &&
+    mongoUser !== null &&
+    mongoUser.isRegistrationComplete === false &&
+    !(mongoUser as any).isOfflineFallback
   );
 
   return (
@@ -403,6 +439,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loginWithEmailPassword,
         registerWithEmailPassword,
         completeRegistration,
+        dismissOnboarding,
         logout,
         resetPassword,
         toggleTaskComplete,

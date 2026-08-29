@@ -40,6 +40,10 @@ import {
   isGuestAiLimitReached,
   getGuestAiRemaining,
   GUEST_AI_MAX_LIMIT,
+  getUserDailyAiRemaining,
+  AUTH_USER_DAILY_LIMIT,
+  incrementUserDailyAiUsage,
+  isUserDailyLimitReached,
 } from "@/lib/guestAiQuota";
 
 interface Message {
@@ -66,8 +70,9 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
   concepts = [],
   codeSnippet,
 }) => {
-  const { isAuthenticated, openAuthModal } = useAuth();
+  const { user, isAuthenticated, openAuthModal } = useAuth();
   const [guestRemaining, setGuestRemaining] = useState<number>(3);
+  const [userDailyRemaining, setUserDailyRemaining] = useState<number>(100);
 
   const isGlobalHub =
     taskTitle.toLowerCase().includes("lab") ||
@@ -106,12 +111,20 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
   useEffect(() => {
     setMounted(true);
     setGuestRemaining(getGuestAiRemaining());
+    setUserDailyRemaining(getUserDailyAiRemaining(user?.uid));
+
     const handleQuotaChange = () => {
       setGuestRemaining(getGuestAiRemaining());
+      setUserDailyRemaining(getUserDailyAiRemaining(user?.uid));
     };
+
     window.addEventListener("guest-ai-quota-change", handleQuotaChange);
-    return () => window.removeEventListener("guest-ai-quota-change", handleQuotaChange);
-  }, []);
+    window.addEventListener("user-ai-quota-change", handleQuotaChange);
+    return () => {
+      window.removeEventListener("guest-ai-quota-change", handleQuotaChange);
+      window.removeEventListener("user-ai-quota-change", handleQuotaChange);
+    };
+  }, [user?.uid]);
 
   // Full Screen keyboard & scroll lock handling
   useEffect(() => {
@@ -258,7 +271,7 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
     setMessages((prev) => [...prev, userMsg]);
     if (!customPrompt) setInputQuery("");
 
-    // GUEST LIMIT INTERCEPTOR: Unauthenticated users are allowed max 3 AI chats
+    // 1. GUEST LIMIT INTERCEPTOR: Unauthenticated users are allowed max 3 AI chats
     if (!isAuthenticated) {
       if (isGuestAiLimitReached()) {
         setTimeout(() => {
@@ -267,7 +280,7 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
             {
               id: (Date.now() + 1).toString(),
               role: "assistant",
-              text: `🔒 **Free Guest Limit Reached (${GUEST_AI_MAX_LIMIT}/${GUEST_AI_MAX_LIMIT} chats used)**\n\nYou've used your 3 free questions on this device. Please **Sign In** with Google, GitHub, or Email to unlock **Unlimited AI Coaching**, interview hints, and progress tracking!`,
+              text: `🔒 **Free Guest Limit Reached (${GUEST_AI_MAX_LIMIT}/${GUEST_AI_MAX_LIMIT} chats used)**\n\nYou've used your 3 free questions on this device. Please **Sign In** with Google, GitHub, or Email to unlock **100 AI Coaching messages per day**, interview hints, and progress tracking!`,
               timestamp: "Just now",
             },
           ]);
@@ -277,6 +290,24 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
       }
       incrementGuestAiUsage();
       setGuestRemaining(getGuestAiRemaining());
+    } else if (!userApiKey) {
+      // 2. AUTHENTICATED USER DAILY LIMIT: 100 messages / day (unless custom BYOK key is set)
+      if (isUserDailyLimitReached(user?.uid)) {
+        setTimeout(() => {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: (Date.now() + 1).toString(),
+              role: "assistant",
+              text: `🔒 **Daily AI Limit Reached (100/100 chats used today)**\n\nYou have used your **100 daily AI coaching messages** for today. Your quota will automatically reset at midnight!\n\n💡 *Tip: You can also configure your own personal Google Gemini API Key in Settings (⚙️ icon) to continue without daily limits.*`,
+              timestamp: "Just now",
+            },
+          ]);
+        }, 150);
+        return;
+      }
+      incrementUserDailyAiUsage(user?.uid);
+      setUserDailyRemaining(getUserDailyAiRemaining(user?.uid));
     }
 
     // TOKEN SAVINGS INTERCEPTOR: Answer simple casual greetings locally without API calls
@@ -311,6 +342,7 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
           prompt: queryToSend,
           mode,
           userApiKey: userApiKey || undefined,
+          uid: user?.uid || undefined,
           context: {
             taskTitle,
             category,
@@ -323,7 +355,14 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
 
       const data = await res.json();
 
+      if (data.remaining !== undefined && isAuthenticated) {
+        setUserDailyRemaining(data.remaining);
+      }
+
       if (!res.ok || data.error) {
+        if (data.requiresAuth) {
+          openAuthModal("login");
+        }
         throw new Error(data.error || "Failed to communicate with AI.");
       }
 
@@ -498,15 +537,18 @@ export const AIInterviewDrawer: React.FC<AIInterviewDrawerProps> = ({
                     </span>
 
                     {isAuthenticated ? (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-semibold hidden sm:inline-flex items-center gap-1 flex-shrink-0">
-                        ✨ Unlimited
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-semibold hidden sm:inline-flex items-center gap-1 flex-shrink-0"
+                        title="100 AI chats allowed per day. Resets every midnight."
+                      >
+                        ✨ {userDailyRemaining}/{AUTH_USER_DAILY_LIMIT} Daily
                       </span>
                     ) : (
                       <button
                         type="button"
                         onClick={() => openAuthModal("login")}
                         className="text-[10px] px-2 py-0.5 rounded-full bg-slate-950 text-amber-400 border border-amber-500/30 hover:border-amber-400 font-mono font-semibold flex items-center gap-1 flex-shrink-0 cursor-pointer"
-                        title="3 free guest chats allowed. Click to Sign In for unlimited access."
+                        title="3 free guest chats allowed. Click to Sign In for 100 daily chats."
                       >
                         <span>⚡ Guest: {guestRemaining}/{GUEST_AI_MAX_LIMIT} Left</span>
                       </button>

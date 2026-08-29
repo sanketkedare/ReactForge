@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Sparkles,
   LogIn,
+  BookOpen,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -21,7 +22,15 @@ export default function UserMenu() {
   const { user, mongoUser, loading, isAuthenticated, openAuthModal, logout } =
     useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const photoURL = mongoUser?.photoURL || user?.photoURL;
+
+  // Reset img error if photoURL changes
+  useEffect(() => {
+    setImgError(false);
+  }, [photoURL]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -66,11 +75,13 @@ export default function UserMenu() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-full bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500/40 transition-all text-left shadow-sm group"
       >
-        {user.photoURL ? (
+        {!imgError && photoURL ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={user.photoURL}
+            src={photoURL}
             alt={displayName}
+            referrerPolicy="no-referrer"
+            onError={() => setImgError(true)}
             className="w-6 h-6 rounded-full object-cover border border-amber-500/40"
           />
         ) : (
@@ -108,11 +119,13 @@ export default function UserMenu() {
             {/* Header info */}
             <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/80 mb-2">
               <div className="flex items-center gap-2.5 mb-2">
-                {user.photoURL ? (
+                {!imgError && photoURL ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={user.photoURL}
+                    src={photoURL}
                     alt={displayName}
+                    referrerPolicy="no-referrer"
+                    onError={() => setImgError(true)}
                     className="w-10 h-10 rounded-full object-cover border border-amber-500/40"
                   />
                 ) : (
@@ -167,6 +180,22 @@ export default function UserMenu() {
 
             {/* Links */}
             <div className="space-y-1">
+              {role === "admin" && (
+                <Link
+                  href="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 transition-all group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Shield className="w-4 h-4 text-red-400" />
+                    <span>Admin Control Center</span>
+                  </div>
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-red-500/30 text-white font-bold">
+                    PROTAL
+                  </span>
+                </Link>
+              )}
+
               <Link
                 href="/profile"
                 onClick={() => setIsOpen(false)}
@@ -183,6 +212,15 @@ export default function UserMenu() {
               >
                 <Sparkles className="w-4 h-4 text-cyan-400" />
                 <span>100-Task Curriculum</span>
+              </Link>
+
+              <Link
+                href="/case-study"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+              >
+                <BookOpen className="w-4 h-4 text-purple-400" />
+                <span>Project Case Study & Releases</span>
               </Link>
             </div>
 

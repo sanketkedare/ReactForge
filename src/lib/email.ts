@@ -1,11 +1,46 @@
 import nodemailer from "nodemailer";
 import path from "node:path";
 import fs from "node:fs";
+import { connectToDatabase } from "@/lib/mongodb";
+import { FailedEmail } from "@/models/FailedEmail";
 
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM || `ReactForge <${EMAIL_USER}>`;
 const APP_URL = "https://reactforge.sanketkedare.com";
+
+/**
+ * Log failed email attempts to MongoDB FailedEmail collection
+ */
+async function logFailedEmail(
+  data: WelcomeEmailData,
+  errorMessage: string,
+  errorStack?: string
+) {
+  try {
+    const db = await connectToDatabase();
+    if (db) {
+      await FailedEmail.create({
+        toEmail: data.toEmail,
+        displayName: data.displayName,
+        template: "welcome_email",
+        errorMessage,
+        errorStack: errorStack || "",
+        payload: data,
+        attempts: 1,
+        status: "failed",
+      });
+      console.log(
+        `📝 [FailedEmail Collection] Recorded failure for ${data.toEmail} in MongoDB.`
+      );
+    }
+  } catch (logErr: any) {
+    console.error(
+      "⚠️ [FailedEmail Collection] Failed to save failure record to DB:",
+      logErr.message || logErr
+    );
+  }
+}
 
 /**
  * Creates reusable Nodemailer transporter using Gmail SMTP
@@ -48,6 +83,7 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<boolean>
 
   if (!transporter) {
     console.warn("⚠️ [Email Service] EMAIL_USER or EMAIL_PASS not configured. Skipping email send.");
+    await logFailedEmail(data, "EMAIL_USER or EMAIL_PASS not configured in environment.");
     return false;
   }
 
@@ -333,6 +369,7 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<boolean>
     return true;
   } catch (error: any) {
     console.error(`🔴 [Email Service] Failed to send welcome email:`, error.message || error);
+    await logFailedEmail(data, error.message || String(error), error.stack);
     return false;
   }
 }

@@ -99,8 +99,29 @@ export const GlobalFooter: React.FC = () => {
               </a>
             </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-2 pt-1">
+            {/* Social Links, Live Domain & Case Study Button */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <a
+                href="https://reactforge.sanketkedare.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-950/80 hover:bg-emerald-900/80 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-white transition-all text-xs font-bold shadow-md shadow-emerald-500/10 group"
+                title="Visit Live ReactForge Production Application"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Live App</span>
+                <ExternalLink className="w-3 h-3 text-emerald-400 group-hover:translate-x-0.5 -translate-y-0.5 transition-transform" />
+              </a>
+
+              <Link
+                href="/case-study"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-purple-950/80 to-slate-900 hover:from-purple-900/80 hover:to-slate-800 border border-purple-500/40 hover:border-purple-400 text-purple-200 hover:text-white transition-all text-xs font-bold shadow-md shadow-purple-500/10 group"
+                title="Read ReactForge Architectural Case Study"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform" />
+                <span>Case Study</span>
+              </Link>
+
               <a
                 href="https://github.com/sanketkedare/ReactForge"
                 target="_blank"
@@ -183,13 +204,20 @@ export const GlobalFooter: React.FC = () => {
                   </span>
                 </Link>
               </li>
-              <li className="pt-2 border-t border-slate-800/60">
+              <li className="pt-2 border-t border-slate-800/60 space-y-1.5">
                 <Link
                   href="/tasks"
                   className="flex items-center gap-1.5 text-amber-400 hover:text-amber-300 font-semibold transition-colors"
                 >
                   <Code2 className="w-3.5 h-3.5" />
                   <span>Browse Full 100 Tasks Directory →</span>
+                </Link>
+                <Link
+                  href="/case-study"
+                  className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-semibold transition-colors block text-[11px]"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  <span>Read Full Project Case Study & History →</span>
                 </Link>
               </li>
             </ul>

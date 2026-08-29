@@ -22,6 +22,11 @@ export interface IUser extends Document {
     longest: number;
     lastActiveDate: Date | null;
   };
+  aiUsage?: {
+    date: string;
+    count: number;
+  };
+  welcomeEmailSent?: boolean;
   xp: number;
   lastLoginAt: Date;
   onboardingCompletedAt?: Date;
@@ -112,6 +117,14 @@ const UserSchema = new Schema<IUser>(
       current: { type: Number, default: 0 },
       longest: { type: Number, default: 0 },
       lastActiveDate: { type: Date, default: null },
+    },
+    aiUsage: {
+      date: { type: String, default: "" },
+      count: { type: Number, default: 0 },
+    },
+    welcomeEmailSent: {
+      type: Boolean,
+      default: false,
     },
     xp: {
       type: Number,

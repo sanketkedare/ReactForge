@@ -20,6 +20,7 @@ import {
   Award,
   ShieldCheck,
   Zap,
+  X,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/hooks/useAuth";
@@ -51,8 +52,14 @@ const PRIMARY_FOCUSES = [
 ];
 
 export default function RegistrationOnboardingModal() {
-  const { user, mongoUser, requiresOnboarding, completeRegistration, logout } =
-    useAuth();
+  const {
+    user,
+    mongoUser,
+    requiresOnboarding,
+    completeRegistration,
+    dismissOnboarding,
+    logout,
+  } = useAuth();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [displayName, setDisplayName] = useState("");
@@ -151,8 +158,18 @@ export default function RegistrationOnboardingModal() {
         <div className="absolute -top-32 -right-32 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
+        {/* Close / Dismiss Button */}
+        <button
+          type="button"
+          onClick={dismissOnboarding}
+          className="absolute top-5 right-5 p-2 text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 rounded-xl transition-all border border-slate-800 z-20"
+          title="Skip for now"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
         {/* Top Progress Badge */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/80">
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/80 pr-10">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-amber-500/20 via-slate-900 to-slate-950 border border-amber-500/30 p-1.5 flex items-center justify-center shadow-inner">
               <Image
@@ -249,7 +266,7 @@ export default function RegistrationOnboardingModal() {
                     className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-800 focus:border-amber-500 rounded-xl text-white text-sm focus:outline-none transition-colors font-mono"
                   />
                 </div>
-                <span className="text-[10px] text-slate-500 mt-1 block font-mono">
+                <span className="text-[10px] text-slate-500 mt-1 block">
                   Your profile URL: reactforge.sanketkedare.com/@{username || "username"}
                 </span>
               </div>
@@ -268,13 +285,22 @@ export default function RegistrationOnboardingModal() {
             </div>
 
             <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-800/80">
-              <button
-                type="button"
-                onClick={logout}
-                className="text-xs text-red-400 hover:text-red-300 transition-colors"
-              >
-                Sign out & exit
-              </button>
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                >
+                  Sign out & exit
+                </button>
+                <button
+                  type="button"
+                  onClick={dismissOnboarding}
+                  className="text-xs text-slate-400 hover:text-white transition-colors"
+                >
+                  Skip for now
+                </button>
+              </div>
 
               <button
                 type="submit"

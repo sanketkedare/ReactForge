@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLocalGreetingResponse } from "@/lib/aiGreetings";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User } from "@/models/User";
+import { GuestUsage } from "@/models/GuestUsage";
+
+function getTodayString(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+}
+
+const AUTH_DAILY_MAX = 100;
+const GUEST_MAX = 3;
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,6 +22,7 @@ export async function POST(req: NextRequest) {
       context = {},
       mode = "interview",
       userApiKey,
+      uid,
     } = body;
 
     const {
@@ -19,7 +33,7 @@ export async function POST(req: NextRequest) {
       code = "",
     } = context;
 
-    // TOKEN SAVINGS: Intercept simple casual greetings without consuming API tokens
+    // 1. TOKEN SAVINGS: Intercept simple casual greetings without consuming API tokens
     const localGreeting = getLocalGreetingResponse(prompt, taskTitle);
     if (localGreeting) {
       return NextResponse.json({
@@ -27,6 +41,76 @@ export async function POST(req: NextRequest) {
         model: "local-fast",
         response: localGreeting,
       });
+    }
+
+    // 2. SERVER-SIDE MONGODB RATE LIMITING
+    let userDoc: any = null;
+    let guestDoc: any = null;
+    let userRemaining = AUTH_DAILY_MAX;
+    const isCustomKey = Boolean(userApiKey && userApiKey.trim());
+
+    if (!isCustomKey) {
+      const db = await connectToDatabase();
+
+      if (db) {
+        const todayStr = getTodayString();
+
+        if (uid) {
+          // ==========================================
+          // AUTHENTICATED USER: 100 MESSAGES / DAY
+          // ==========================================
+          userDoc = await User.findOne({ uid });
+
+          if (userDoc) {
+            const currentUsageDate = userDoc.aiUsage?.date || "";
+            let currentCount = userDoc.aiUsage?.count || 0;
+
+            // Reset count if it's a new calendar day
+            if (currentUsageDate !== todayStr) {
+              currentCount = 0;
+              userDoc.aiUsage = { date: todayStr, count: 0 };
+            }
+
+            if (currentCount >= AUTH_DAILY_MAX) {
+              return NextResponse.json(
+                {
+                  error: `🔒 Daily AI Limit Reached (${AUTH_DAILY_MAX}/${AUTH_DAILY_MAX} chats used today). Your quota will automatically reset at midnight. You can also configure your personal Google Gemini API Key in Settings to continue without limits.`,
+                  remaining: 0,
+                  limitReached: true,
+                },
+                { status: 429 }
+              );
+            }
+
+            userRemaining = Math.max(0, AUTH_DAILY_MAX - currentCount - 1);
+          }
+        } else {
+          // ==========================================
+          // GUEST USER: 3 MESSAGES MAX (TRACKED VIA IP)
+          // ==========================================
+          const forwarded = req.headers.get("x-forwarded-for");
+          const realIp = req.headers.get("x-real-ip");
+          const ip = (forwarded ? forwarded.split(",")[0].trim() : realIp) || "anonymous-guest";
+
+          guestDoc = await GuestUsage.findOne({ ip });
+
+          if (!guestDoc) {
+            guestDoc = new GuestUsage({ ip, count: 0, lastUsedAt: new Date() });
+          }
+
+          if (guestDoc.count >= GUEST_MAX) {
+            return NextResponse.json(
+              {
+                error: `🔒 Free Guest Limit Reached (${GUEST_MAX}/${GUEST_MAX} chats used). Please Sign In with Google, GitHub, or Email to unlock 100 AI Coaching messages per day!`,
+                remaining: 0,
+                limitReached: true,
+                requiresAuth: true,
+              },
+              { status: 429 }
+            );
+          }
+        }
+      }
     }
 
     const apiKey = userApiKey || process.env.GEMINI_API_KEY;
@@ -75,14 +159,12 @@ Provide direct, concise, high-density responses with structured markdown, bullet
       code ? `\n\nCandidate's Current Code:\n\`\`\`tsx\n${code}\n\`\`\`` : ""
     }`;
 
-    // Available Active Gemini Models in priority order
+    // Verified active Gemini Models in priority order
     const geminiModels = [
-      "gemini-3.6-flash",
-      "gemini-3.7-flash",
-      "gemini-3.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-1.5-flash-8b",
       "gemini-flash-latest",
-      // "gemini-1.5-flash",
-      // "gemini-2.0-flash",
     ];
 
     let lastError = "";
@@ -119,10 +201,28 @@ Provide direct, concise, high-density responses with structured markdown, bullet
           const candidateText =
             data?.candidates?.[0]?.content?.parts?.[0]?.text;
           if (candidateText) {
+            // 3. PERSIST USAGE INCREMENT IN MONGODB ON SUCCESS
+            if (!isCustomKey) {
+              try {
+                if (userDoc) {
+                  userDoc.aiUsage.count = (userDoc.aiUsage.count || 0) + 1;
+                  userDoc.aiUsage.date = getTodayString();
+                  await userDoc.save();
+                } else if (guestDoc) {
+                  guestDoc.count = (guestDoc.count || 0) + 1;
+                  guestDoc.lastUsedAt = new Date();
+                  await guestDoc.save();
+                }
+              } catch (dbSaveErr) {
+                console.error("⚠️ [AI Quota] Failed to increment count in DB:", dbSaveErr);
+              }
+            }
+
             return NextResponse.json({
               success: true,
               model,
               response: candidateText,
+              remaining: userRemaining,
             });
           }
         } else {

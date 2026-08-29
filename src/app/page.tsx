@@ -13,6 +13,7 @@ import {
   Zap,
   Sparkles,
   Trophy,
+  BookOpen,
 } from "lucide-react";
 import { SiJavascript, SiReact } from "react-icons/si";
 import StudioNav from "@/components/studio/StudioNav";
@@ -228,6 +229,17 @@ export default function CleanStudentHomePage() {
                 </motion.button>
               </Link>
 
+              <Link href="/case-study">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-2 px-7 py-4 rounded-full border border-purple-500/40 bg-purple-950/30 hover:bg-purple-900/50 text-purple-200 text-sm font-semibold transition-all shadow-lg shadow-purple-500/10 backdrop-blur-sm group"
+                >
+                  <BookOpen className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+                  <span>Project Case Study 📄</span>
+                </motion.button>
+              </Link>
+
               <button
                 onClick={() => {
                   const el = document.getElementById("learning-flow");
@@ -238,7 +250,7 @@ export default function CleanStudentHomePage() {
                 }}
                 className="flex items-center gap-2 px-7 py-4 rounded-full border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-sm font-medium transition-all shadow-sm backdrop-blur-sm cursor-pointer"
               >
-                <span>View Learning Flowchart ↓</span>
+                <span>View Flowchart ↓</span>
               </button>
             </motion.div>
 

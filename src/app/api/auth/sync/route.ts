@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import { User } from "@/models/User";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   let body: any = {};
@@ -39,33 +40,42 @@ export async function POST(req: NextRequest) {
           targetRole: "Frontend Engineer",
           isOfflineFallback: true,
         },
-        requiresOnboarding: true,
+        requiresOnboarding: false,
       });
     }
 
+    const cleanEmail = email.toLowerCase().trim();
+    const isAdminEmail = cleanEmail === "sanketkedare200@gmail.com";
+
     // Upsert user in MongoDB
     let user = await User.findOne({ uid });
+    let isNewUser = false;
 
     if (!user) {
       // Check if user exists by email (e.g. signed up with email first, now Google)
-      user = await User.findOne({ email: email.toLowerCase().trim() });
+      user = await User.findOne({ email: cleanEmail });
       if (user) {
         user.uid = uid;
         if (photoURL && !user.photoURL) user.photoURL = photoURL;
         if (user.isRegistrationComplete === undefined || user.isRegistrationComplete === null) {
           user.isRegistrationComplete = false;
         }
+        if (isAdminEmail) {
+          user.role = "admin";
+        }
         user.lastLoginAt = new Date();
         await user.save();
       } else {
-        // Create new user record with isRegistrationComplete = false
+        isNewUser = true;
+        // Create new user record
         user = await User.create({
           uid,
-          email: email.toLowerCase().trim(),
+          email: cleanEmail,
           displayName: displayName || "Frontend Engineer",
           photoURL: photoURL || "",
-          role: "user",
+          role: isAdminEmail ? "admin" : "user",
           isRegistrationComplete: false,
+          welcomeEmailSent: true,
           completedTasks: [],
           bookmarkedTasks: [],
           streak: {
@@ -85,10 +95,39 @@ export async function POST(req: NextRequest) {
       if (photoURL && !user.photoURL) {
         user.photoURL = photoURL;
       }
-      if (user.isRegistrationComplete === undefined || user.isRegistrationComplete === null) {
-        user.isRegistrationComplete = false;
+      if (isAdminEmail) {
+        user.role = "admin";
+      }
+      // If the user already has a custom name/username, or completed tasks, or was created previously:
+      // mark registration as completed so they are never trapped in onboarding.
+      if (
+        user.isRegistrationComplete === true ||
+        (user.displayName && user.displayName !== "Frontend Engineer") ||
+        user.username ||
+        (user.completedTasks && user.completedTasks.length > 0)
+      ) {
+        user.isRegistrationComplete = true;
+      } else if (user.isRegistrationComplete === undefined || user.isRegistrationComplete === null) {
+        user.isRegistrationComplete = true;
       }
       await user.save();
+    }
+
+    // Dispatch welcome email on fresh registration
+    if (isNewUser || (!user.welcomeEmailSent && email && email.includes("@"))) {
+      user.welcomeEmailSent = true;
+      await user.save();
+
+      sendWelcomeEmail({
+        toEmail: email.toLowerCase().trim(),
+        displayName: displayName || user.displayName || "Frontend Engineer",
+        username: user.username,
+        targetRole: user.targetRole || "Frontend Engineer",
+        experienceLevel: user.experienceLevel || "junior",
+        primaryFocus: user.primaryFocus || "Machine Coding Interviews",
+      }).catch((err) => {
+        console.error("⚠️ [Auth Sync Welcome Email Error]:", err.message || err);
+      });
     }
 
     console.log(`✅ [Auth Sync] Synced ${email} in MongoDB | isRegistrationComplete: ${user.isRegistrationComplete}`);
@@ -100,7 +139,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error("Auth Sync Warning:", error.message || error);
-    // Gracefully return fallback so client UI never breaks
+    // Bug fix: Do NOT return requiresOnboarding: true in the catch block.
+    // A network/DB error should never open the onboarding modal for existing users.
+    // Mark the response as an offline fallback so the client can guard against it.
     return NextResponse.json({
       success: true,
       user: {
@@ -109,14 +150,14 @@ export async function POST(req: NextRequest) {
         displayName: body?.displayName || "Frontend Engineer",
         photoURL: body?.photoURL || "",
         role: "user",
-        isRegistrationComplete: false,
+        isRegistrationComplete: true,   // assume complete — don't punish user for DB errors
         completedTasks: [],
         bookmarkedTasks: [],
         streak: { current: 1, longest: 1, lastActiveDate: new Date() },
         xp: 0,
-        isOfflineFallback: true,
+        isOfflineFallback: true,         // client guards requiresOnboarding against this flag
       },
-      requiresOnboarding: true,
+      requiresOnboarding: false,         // never force onboarding on error
     });
   }
 }

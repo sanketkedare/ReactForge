@@ -37,6 +37,10 @@ import {
   isGuestAiLimitReached,
   getGuestAiRemaining,
   GUEST_AI_MAX_LIMIT,
+  getUserDailyAiRemaining,
+  AUTH_USER_DAILY_LIMIT,
+  incrementUserDailyAiUsage,
+  isUserDailyLimitReached,
 } from "@/lib/guestAiQuota";
 
 interface ChatMessage {
@@ -48,8 +52,9 @@ interface ChatMessage {
 }
 
 export const HomeAIChat: React.FC = () => {
-  const { isAuthenticated, openAuthModal } = useAuth();
+  const { user, isAuthenticated, openAuthModal } = useAuth();
   const [guestRemaining, setGuestRemaining] = useState<number>(3);
+  const [userDailyRemaining, setUserDailyRemaining] = useState<number>(100);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -76,15 +81,23 @@ export const HomeAIChat: React.FC = () => {
   useEffect(() => {
     setMounted(true);
     setGuestRemaining(getGuestAiRemaining());
+    setUserDailyRemaining(getUserDailyAiRemaining(user?.uid));
+
     const saved = localStorage.getItem("REACT_LAB_GEMINI_API_KEY");
     if (saved) setUserApiKey(saved);
 
     const handleQuotaChange = () => {
       setGuestRemaining(getGuestAiRemaining());
+      setUserDailyRemaining(getUserDailyAiRemaining(user?.uid));
     };
+
     window.addEventListener("guest-ai-quota-change", handleQuotaChange);
-    return () => window.removeEventListener("guest-ai-quota-change", handleQuotaChange);
-  }, []);
+    window.addEventListener("user-ai-quota-change", handleQuotaChange);
+    return () => {
+      window.removeEventListener("guest-ai-quota-change", handleQuotaChange);
+      window.removeEventListener("user-ai-quota-change", handleQuotaChange);
+    };
+  }, [user?.uid]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -201,7 +214,7 @@ export const HomeAIChat: React.FC = () => {
     if (!queryText) setInput("");
     setAttachedFile(null);
 
-    // GUEST LIMIT INTERCEPTOR: Unauthenticated users are allowed max 3 AI chats
+    // 1. GUEST LIMIT INTERCEPTOR: Unauthenticated users are allowed max 3 AI chats
     if (!isAuthenticated) {
       if (isGuestAiLimitReached()) {
         setTimeout(() => {
@@ -210,7 +223,7 @@ export const HomeAIChat: React.FC = () => {
             {
               id: (Date.now() + 1).toString(),
               role: "assistant",
-              text: `🔒 **Free Guest Limit Reached (${GUEST_AI_MAX_LIMIT}/${GUEST_AI_MAX_LIMIT} chats used)**\n\nYou've used your 3 free questions on this device. Please **Sign In** to unlock **Unlimited AI Coaching**, customized 7-day study plans, and automatic progress tracking!`,
+              text: `🔒 **Free Guest Limit Reached (${GUEST_AI_MAX_LIMIT}/${GUEST_AI_MAX_LIMIT} chats used)**\n\nYou've used your 3 free questions on this device. Please **Sign In** to unlock **100 AI Coaching messages per day**, customized 7-day study plans, and automatic progress tracking!`,
               timestamp: "Just now",
             },
           ]);
@@ -220,6 +233,24 @@ export const HomeAIChat: React.FC = () => {
       }
       incrementGuestAiUsage();
       setGuestRemaining(getGuestAiRemaining());
+    } else if (!userApiKey) {
+      // 2. AUTHENTICATED USER DAILY LIMIT: 100 messages / day (unless custom BYOK key is set)
+      if (isUserDailyLimitReached(user?.uid)) {
+        setTimeout(() => {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: (Date.now() + 1).toString(),
+              role: "assistant",
+              text: `🔒 **Daily AI Limit Reached (100/100 chats used today)**\n\nYou have used your **100 daily AI coaching messages** for today. Your quota will automatically reset at midnight!\n\n💡 *Tip: You can also configure your own personal Google Gemini API Key in Settings (⚙️ icon) to continue without daily limits.*`,
+              timestamp: "Just now",
+            },
+          ]);
+        }, 150);
+        return;
+      }
+      incrementUserDailyAiUsage(user?.uid);
+      setUserDailyRemaining(getUserDailyAiRemaining(user?.uid));
     }
 
     // TOKEN SAVINGS INTERCEPTOR: Answer simple casual greetings locally without API calls
@@ -253,6 +284,7 @@ export const HomeAIChat: React.FC = () => {
           prompt: actualPromptToSend,
           mode: "interview",
           userApiKey: userApiKey || undefined,
+          uid: user?.uid || undefined,
           context: {
             taskTitle: "React Machine Coding Hub",
             category: "Full 100-Task Curriculum",
@@ -264,7 +296,14 @@ export const HomeAIChat: React.FC = () => {
 
       const data = await res.json();
 
+      if (data.remaining !== undefined && isAuthenticated) {
+        setUserDailyRemaining(data.remaining);
+      }
+
       if (!res.ok || data.error) {
+        if (data.requiresAuth) {
+          openAuthModal("login");
+        }
         throw new Error(data.error || "Failed to receive response from AI.");
       }
 
@@ -363,15 +402,18 @@ export const HomeAIChat: React.FC = () => {
             </span>
 
             {isAuthenticated ? (
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-semibold hidden sm:flex items-center gap-1">
-                ✨ Unlimited AI
+              <span
+                className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-semibold hidden sm:flex items-center gap-1"
+                title="100 AI chats allowed per day. Resets every midnight."
+              >
+                ✨ {userDailyRemaining}/{AUTH_USER_DAILY_LIMIT} Daily
               </span>
             ) : (
               <button
                 type="button"
                 onClick={() => openAuthModal("login")}
                 className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-900/90 text-amber-400 border border-amber-500/30 hover:border-amber-400 font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer"
-                title="Guest mode: 3 free chats allowed. Click to Sign In for unlimited access."
+                title="Guest mode: 3 free chats allowed. Click to Sign In for 100 daily chats."
               >
                 <span>⚡ Guest: {guestRemaining}/{GUEST_AI_MAX_LIMIT} Left</span>
                 <span className="text-slate-500 hidden md:inline">• Sign In</span>

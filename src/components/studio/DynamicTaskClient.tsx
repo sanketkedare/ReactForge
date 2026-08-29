@@ -308,7 +308,10 @@ export const DynamicTaskClient: React.FC<DynamicTaskClientProps> = ({ slug }) =>
                     <span>LIVE COMPONENT STATE SNAPSHOT</span>
                     <span>MEMORY: 0.8 MB</span>
                   </div>
-                  <pre className="text-amber-300 overflow-x-auto text-[11px] pt-1">
+                  <pre
+                    suppressHydrationWarning
+                    className="text-amber-300 overflow-x-auto text-[11px] pt-1"
+                  >
                     {JSON.stringify(
                       {
                         taskId: project.id,
@@ -316,7 +319,7 @@ export const DynamicTaskClient: React.FC<DynamicTaskClientProps> = ({ slug }) =>
                         inputSample: sampleText,
                         isActive: toggleActive,
                         rangeValue: sliderVal,
-                        timestamp: Date.now(),
+                        status: "ready",
                       },
                       null,
                       2
