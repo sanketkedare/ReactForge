@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import StudioNav from "@/components/studio/StudioNav";
 import GlobalFooter from "@/components/common/GlobalFooter";
-import { LEARNING_PROJECTS } from "@/data/learningProjects";
+import { ProfilerProvider } from "@/context/ProfilerContext";
 
 export default function StudioLayout({
   children,
@@ -16,13 +16,15 @@ export default function StudioLayout({
         <div className="absolute top-[40%] right-[10%] w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[160px]" />
       </div>
 
-      <StudioNav />
+      <ProfilerProvider>
+        <StudioNav />
 
-      {/* Main Container with pt-24 offset below navbar */}
-      <main className="flex-1 w-full relative z-10 pt-24 pb-12">{children}</main>
+        {/* Main Container with pt-24 offset below navbar */}
+        <main className="flex-1 w-full relative z-10 pt-24 pb-12">{children}</main>
 
-      {/* Global Studio Footer */}
-      <GlobalFooter />
+        {/* Global Studio Footer */}
+        <GlobalFooter />
+      </ProfilerProvider>
     </div>
   );
 }

@@ -87,13 +87,17 @@ export default async function DynamicTaskPage({ params }: PageProps) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  const project: LearningProject | undefined = LEARNING_PROJECTS.find(
+  const projectIndex = LEARNING_PROJECTS.findIndex(
     (p) => p.id === slug || p.path === `/${slug}`
   );
 
-  if (!project) {
+  if (projectIndex === -1) {
     notFound();
   }
+
+  const project = LEARNING_PROJECTS[projectIndex];
+  const prevProject = projectIndex > 0 ? LEARNING_PROJECTS[projectIndex - 1] : null;
+  const nextProject = projectIndex < LEARNING_PROJECTS.length - 1 ? LEARNING_PROJECTS[projectIndex + 1] : null;
 
   const canonicalUrl = `https://reactforge.sanketkedare.com${
     project.path.startsWith("/") ? project.path : `/${project.path}`
@@ -158,7 +162,12 @@ export default async function DynamicTaskPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <DynamicTaskClient slug={slug} />
+      <DynamicTaskClient
+        slug={slug}
+        initialProject={project}
+        initialPrevProject={prevProject}
+        initialNextProject={nextProject}
+      />
     </>
   );
 }

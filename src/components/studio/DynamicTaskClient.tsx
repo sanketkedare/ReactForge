@@ -28,19 +28,40 @@ import { useAuth } from "@/hooks/useAuth";
 
 interface DynamicTaskClientProps {
   slug: string;
+  initialProject?: LearningProject;
+  initialPrevProject?: LearningProject | null;
+  initialNextProject?: LearningProject | null;
 }
 
-export const DynamicTaskClient: React.FC<DynamicTaskClientProps> = ({ slug }) => {
+export const DynamicTaskClient: React.FC<DynamicTaskClientProps> = ({
+  slug,
+  initialProject,
+  initialPrevProject,
+  initialNextProject,
+}) => {
   const projectIndex = useMemo(() => {
+    if (initialProject) return -1;
     return LEARNING_PROJECTS.findIndex(
       (p) => p.id === slug || p.path === `/${slug}`
     );
-  }, [slug]);
+  }, [slug, initialProject]);
 
-  const project: LearningProject | undefined = LEARNING_PROJECTS[projectIndex];
+  const project: LearningProject | undefined =
+    initialProject || (projectIndex >= 0 ? LEARNING_PROJECTS[projectIndex] : undefined);
 
-  const prevProject = projectIndex > 0 ? LEARNING_PROJECTS[projectIndex - 1] : null;
-  const nextProject = projectIndex < LEARNING_PROJECTS.length - 1 ? LEARNING_PROJECTS[projectIndex + 1] : null;
+  const prevProject =
+    initialPrevProject !== undefined
+      ? initialPrevProject
+      : projectIndex > 0
+      ? LEARNING_PROJECTS[projectIndex - 1]
+      : null;
+
+  const nextProject =
+    initialNextProject !== undefined
+      ? initialNextProject
+      : projectIndex >= 0 && projectIndex < LEARNING_PROJECTS.length - 1
+      ? LEARNING_PROJECTS[projectIndex + 1]
+      : null;
 
   const { toggleTaskComplete, toggleTaskBookmark, isTaskCompleted, isTaskBookmarked } = useAuth();
   const isSolved = project ? isTaskCompleted(project.id) : false;

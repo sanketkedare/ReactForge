@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import TheamContextComponent from "@/context/TheamContextComponent";
-import ProfilerProvider from "@/context/ProfilerContext";
 
 export const viewport: Viewport = {
   themeColor: "#07090e",
@@ -173,11 +172,9 @@ export default function RootLayout({
       <body suppressHydrationWarning className="bg-[#07090e] text-slate-100 antialiased">
         <AuthProvider>
           <TheamContextComponent>
-            <ProfilerProvider>
-              {children}
-              <AuthModal />
-              <RegistrationOnboardingModal />
-            </ProfilerProvider>
+            {children}
+            <AuthModal />
+            <RegistrationOnboardingModal />
           </TheamContextComponent>
         </AuthProvider>
       </body>
