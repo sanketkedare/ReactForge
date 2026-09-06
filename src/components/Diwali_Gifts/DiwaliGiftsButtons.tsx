@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAssignGift } from "./myHooks";
+import { assignGift } from "./myHooks";
 import { GiftPerson } from "@/types";
 
 interface DiwaliGiftsButtonsProps {
@@ -25,7 +25,7 @@ export const DiwaliGiftsButtons: React.FC<DiwaliGiftsButtonsProps> = ({
       if (i.gifts === "No Gifts Assigned") {
         return {
           ...i,
-          gifts: useAssignGift(),
+          gifts: assignGift(),
         };
       }
       return i;
@@ -57,7 +57,7 @@ export const DiwaliGiftsButtons: React.FC<DiwaliGiftsButtonsProps> = ({
     setNames(
       names.map((i) => ({
         ...i,
-        gifts: useAssignGift(),
+        gifts: assignGift(),
       }))
     );
     setAssigned(true);

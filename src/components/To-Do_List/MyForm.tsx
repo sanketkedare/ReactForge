@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import useGenrateId from "./useGenrateId";
+import { generateId } from "./useGenrateId";
 import { TodoItem } from "@/types";
 
 interface MyFormProps {
@@ -15,7 +15,7 @@ export const MyForm: React.FC<MyFormProps> = ({ setAllToDos }) => {
     if (!toDo.trim()) return;
 
     const obj: TodoItem = {
-      id: useGenrateId(),
+      id: generateId(),
       createdAt: new Date().toLocaleString("en-GB", {
         day: "2-digit",
         month: "2-digit",

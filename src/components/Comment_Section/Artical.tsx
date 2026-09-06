@@ -6,7 +6,7 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { artical } from "./utils";
 import { FcDislike, FcLike } from "react-icons/fc";
 import { MdDelete } from "react-icons/md";
-import useGenrateId from "../To-Do_List/useGenrateId";
+import { generateId } from "../To-Do_List/useGenrateId";
 import { Person, CommentItem } from "@/types";
 
 interface ArticalProps {
@@ -53,7 +53,7 @@ export const Artical: React.FC<ArticalProps> = ({ currentPerson }) => {
   const addComment = () => {
     if (commentRef.current && commentRef.current.value.trim()) {
       const obj: CommentItem = {
-        id: useGenrateId(),
+        id: generateId(),
         person: currentPerson,
         text: commentRef.current.value.trim(),
       };

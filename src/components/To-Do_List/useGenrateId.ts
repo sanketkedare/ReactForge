@@ -1,4 +1,4 @@
-export const useGenrateId = (): string => {
+export const generateId = (): string => {
   let pass = "";
   const str =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()1234567890";
@@ -12,4 +12,5 @@ export const useGenrateId = (): string => {
   return pass;
 };
 
-export default useGenrateId;
+export const useGenrateId = generateId;
+export default generateId;

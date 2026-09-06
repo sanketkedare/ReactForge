@@ -17,10 +17,12 @@ export const diwaliGifts: string[] = [
 ];
 
 /**
- * useAssignGift helper
+ * assignGift helper
  * Randomly selects a gift from the predefined list of Diwali gifts.
  */
-export const useAssignGift = (): string => {
+export const assignGift = (): string => {
   const number = Math.floor(Math.random() * diwaliGifts.length);
   return diwaliGifts[number];
 };
+
+export const useAssignGift = assignGift;
