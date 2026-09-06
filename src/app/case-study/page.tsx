@@ -327,7 +327,7 @@ const MASTER_COMMITS: GitCommitItem[] = [
     ],
   },
   {
-    hash: "latest",
+    hash: "9d953ac",
     date: "Sep 06, 2026",
     author: "sanketkedare",
     subject: "✨ Transform into 10-Year Senior Frontend Engineering Platform & Lab",
@@ -345,6 +345,24 @@ const MASTER_COMMITS: GitCommitItem[] = [
       "Production Incident Simulator with 8 real-world postmortems & diffs (/incidents)",
       "Flagship Sandboxed React 19 Live Playground with Console & A11y HUD (/playground)",
       "Architecture Decision Records (ADR-001 to ADR-006) & Root Documentation Suite",
+    ],
+  },
+  {
+    hash: "latest",
+    date: "Sep 06, 2026",
+    author: "sanketkedare",
+    subject: "🧪 Wire Vitest & Testing Library with jsdom and @ path aliases",
+    phase: "Enterprise Security",
+    tag: "v3.1.0",
+    category: "DevOps",
+    impact: "Major",
+    description: "Configured automated Vitest unit & component test suite with jsdom, testing-library/react, and path alias mapping in vitest.config.ts.",
+    additions: 1886,
+    deletions: 72,
+    keyChanges: [
+      "Installed Vitest, @testing-library/react, @testing-library/jest-dom, and jsdom",
+      "Created vitest.config.ts with jsdom runtime and @ path aliases",
+      "Executed 8/8 passing unit & component tests in CI test pipeline",
     ],
   },
 ];

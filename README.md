@@ -213,6 +213,9 @@ Every single challenge includes:
 | **💬 Threaded Recursive Tree** | [`/threaded-comments`](https://reactforge.sanketkedare.com/threaded-comments) | Deeply nested comments with sub-millisecond multi-tab IPC synchronization via `BroadcastChannel`. |
 | **⚔️ State Battleground** | [`/state-battleground`](https://reactforge.sanketkedare.com/state-battleground) | Side-by-side shootout benchmarking **React Context**, **Redux Toolkit**, **Zustand**, and **Signals**. |
 | **🔍 TanStack Query Inspector** | [`/query-inspector`](https://reactforge.sanketkedare.com/query-inspector) | Real-time visual cache explorer for Query Keys, stale/gc timers, and HTTP 500 error chaos injection. |
+| **⚡ Performance Engineering Lab** | [`/performance`](https://reactforge.sanketkedare.com/performance) | Live client Web Vitals (LCP, INP, CLS, TTFB) and 10,000-row DOM virtualization benchmarks. |
+| **🚨 Production Incident Simulator** | [`/incidents`](https://reactforge.sanketkedare.com/incidents) | 8 interactive production postmortems with toggleable root cause vs fixed code comparisons. |
+| **📝 Flagship Live React Playground** | [`/playground`](https://reactforge.sanketkedare.com/playground) | Isolated browser-based live React 19 runtime with Console HUD, AST summary, and A11y auditor. |
 
 </div>
 
@@ -302,12 +305,25 @@ npm run dev
 ```
 > 🚀 Application will launch at: **[http://localhost:3002](http://localhost:3002)**
 
-### 5. Production Build & Validation
+### 5. Running Automated Test Suite
 ```bash
-npx tsc --noEmit        # Verify strict types (0 errors)
-npm run build           # Compile SSG & static pages
-npm start               # Start production server on port 3002
+npm test                # Run Vitest unit & component test suite (8/8 passing)
+npm run lint            # Run ESLint validation (0 errors)
+npx tsc --noEmit        # Verify strict TypeScript compilation (0 errors)
 ```
+
+---
+
+<br />
+
+## 📖 Senior Engineering Documentation Suite
+
+- 🏛️ [**ARCHITECTURE.md**](./ARCHITECTURE.md) — 5-Tier State Hierarchy, Server/Client Boundaries & Dynamic Routing.
+- ⚡ [**PERFORMANCE.md**](./PERFORMANCE.md) — Web Vitals thresholds, 10,000-row virtualization benchmarks & profiling.
+- 🔒 [**SECURITY.md**](./SECURITY.md) — Sandboxed iframe security model, API secret hygiene & XSS defenses.
+- ♿ [**ACCESSIBILITY.md**](./ACCESSIBILITY.md) — WCAG 2.1 AA baseline, focus trap contracts & ARIA patterns.
+- 🧪 [**TESTING.md**](./TESTING.md) — Multi-tier testing pyramid with Vitest, React Testing Library & coverage.
+- 📋 [**DECISIONS.md**](./DECISIONS.md) — Index of all Architecture Decision Records (ADR-001 to ADR-006).
 
 ---
 

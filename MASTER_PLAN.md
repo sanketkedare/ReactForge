@@ -1,9 +1,9 @@
-# 🚀 MASTER PLAN: React Architecture & Performance Studio
-> **From Academic Practice Tasks to a Senior/Staff-Level Open-Source Benchmarking Engine**
+# 🚀 MASTER PLAN: ReactForge — Senior Frontend Engineering Laboratory
+> **100 Machine Coding Challenges, System Design Laboratories & Performance Telemetry Engine**  
 > **Author**: Sanket Kedare  
-> **Target Project**: [`React-Tasks`](https://github.com/sanketkedare/React-Tasks) ➔ `React Architecture & Performance Studio`  
-> **Deployed Reference**: [`react-tasks-keh6.onrender.com`](https://react-tasks-keh6.onrender.com/)  
-> **Version**: 1.0.0 (Master Blueprint)
+> **Target Project**: [`ReactForge`](https://github.com/sanketkedare/ReactForge)  
+> **Deployed Reference**: [`reactforge.sanketkedare.com`](https://reactforge.sanketkedare.com/)  
+> **Version**: 3.1.0 (Production Blueprint)
 
 ---
 
@@ -18,31 +18,32 @@
    - [Module 4: Recursive Infinite-Depth Comment Tree & Real-Time Sync](#module-4-recursive-infinite-depth-comment-tree--real-time-sync)
    - [Module 5: State Management Battleground (Zustand vs Redux vs Context vs Signals)](#module-5-state-management-battleground)
    - [Module 6: TanStack Query v5 Cache & Network Mutation Inspector](#module-6-tanstack-query-v5-cache--network-mutation-inspector)
-   - [Module 7: Interactive In-Browser Code Sandbox (Sandpack / Monaco)](#module-7-interactive-in-browser-code-sandbox)
-5. [Project Architecture (Feature-Sliced Design)](#5-project-architecture-feature-sliced-design)
-6. [Testing & Quality Assurance Suite](#6-testing--quality-assurance-suite)
+   - [Module 7: Interactive In-Browser Code Sandbox (Playground)](#module-7-interactive-in-browser-code-sandbox)
+   - [Module 8: Production Incident Simulator (8 Real-World Postmortems)](#module-8-production-incident-simulator)
+5. [Project Architecture & 5-Tier State Hierarchy](#5-project-architecture-feature-sliced-design)
+6. [Testing & Quality Assurance Suite (Vitest & RTL)](#6-testing--quality-assurance-suite)
 7. [CI/CD & DevOps Pipeline](#7-cicd--devops-pipeline)
-8. [Phased Implementation Roadmap](#8-phased-implementation-roadmap)
+8. [Phased Implementation Roadmap (Phases 1–8)](#8-phased-implementation-roadmap)
 9. [Resume & Portfolio Positioning](#9-resume--portfolio-positioning)
 
 ---
 
 ## 1. Executive Vision & Strategic Pivot
 
-### The Problem with the Current State
-The existing repository is a well-meaning academic collection of beginner tutorials (To-Do List, Tic-Tac-Toe, Password Generator, basic debouncing guns). To technical recruiters and engineering managers, this signals a junior/entry-level candidate.
+### The Problem with Beginner Practice Demos
+Standalone toy apps signal entry-level familiarity. Staff and senior engineering roles require proving architectural judgment, reliability under stress, accessibility standards, memory boundaries, and clear trade-off decision-making.
 
 ### The Master-Level Solution
-Transform the platform into an **interactive developer tool and architecture laboratory**. Instead of simply showing that code runs, the platform will **measure, visualize, profile, and benchmark React architectural trade-offs in real time**.
+Transform the platform into an **interactive developer laboratory and 100-challenge machine coding academy**. The platform **measures, visualizes, profiles, and benchmarks React architectural trade-offs in real time**.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        REACT ARCHITECTURE & PERFORMANCE STUDIO                         │
+│                        REACTFORGE ARCHITECTURE & PERFORMANCE STUDIO                    │
 ├───────────────────────────────┬───────────────────────────────┬────────────────────────┤
 │     COMPLEX ARCHITECTURE      │     REAL-TIME TELEMETRY       │   IN-BROWSER SANDBOX   │
-│  • 100k Virtualization        │  • React.Profiler metrics     │  • Monaco / Sandpack   │
-│  • Concurrency & RAF stream   │  • Re-render flash counter    │  • Live parameter edit │
-│  • State engine comparison    │  • FPS & JS Heap estimations  │  • Pattern rationale   │
+│  • 100k Virtualization        │  • Live Web Vitals (LCP/INP)  │  • Sandboxed Runtime   │
+│  • Concurrency & RAF stream   │  • Re-render flash counter    │  • Console & A11y HUD  │
+│  • State engine comparison    │  • 8 Production Incidents     │  • ADR-001–006 Suite   │
 └───────────────────────────────┴───────────────────────────────┴────────────────────────┘
 ```
 
@@ -52,12 +53,13 @@ Transform the platform into an **interactive developer tool and architecture lab
 
 | Layer | Technology | Rationale |
 | :--- | :--- | :--- |
-| **Core Framework** | **React 19 / 18 + TypeScript 5.x** | Strict typing (`strict: true`), zero `any`, generics, discriminated unions. |
-| **Build Tooling** | **Vite 6** | Instant HMR, roll-up chunk optimization, sub-second build times. |
-| **Styling & Design** | **Tailwind CSS + Radix UI Primitives** | Headless accessible components (a11y) with dark glassmorphic styling tokens. |
-| **State Engines** | **Zustand, Redux Toolkit, React Context, Jotai/Signals** | Multi-engine comparison framework. |
-| **Data Synchronization** | **TanStack Query v5 (React Query) + TanStack Virtual** | Server state caching, optimistic updates, 100k DOM node virtualization. |
-| **Offline Persistence** | **Dexie.js / IndexedDB** | True client-side database storage with web worker background sync. |
+| **Core Framework** | **Next.js 16.3.2 + React 19 + TypeScript 5.6** | Strict typing (`strict: true`), zero `any`, RSC metadata + client sandboxes. |
+| **Build Tooling** | **Turbopack / SWC** | Sub-second HMR, optimized route chunking, production console stripping. |
+| **Styling & Design** | **Tailwind CSS + Obsidian Dark Design System** | Custom WCAG 2.1 AA accessible primitives (`@/components/ui`). |
+| **State Engines** | **Zustand, Redux Toolkit, React Context, TanStack Query** | 5-tier disciplined state architecture. |
+| **Data Synchronization** | **TanStack Query v5 + TanStack Virtual** | Server cache synchronization, optimistic updates, 10,000 DOM row virtualization. |
+| **Offline Persistence** | **Dexie.js / IndexedDB** | True client-side database storage with multi-tab `BroadcastChannel` IPC. |
+| **Testing Engine** | **Vitest + React Testing Library + jsdom** | Unit, component, and accessibility test suites in CI. |
 | **In-Browser Sandbox** | **`@codesandbox/sandpack-react` / Monaco** | Live editable code snippets beside each pattern. |
 | **Testing Suite** | **Vitest + React Testing Library + Playwright** | Unit tests for custom hooks, integration tests for trees, and E2E visual tests. |
 | **CI/CD & Quality** | **GitHub Actions + Lighthouse CI + Husky** | Automated linting, type-checking, 90%+ test coverage gate, automated deploy. |
