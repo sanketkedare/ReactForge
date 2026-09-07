@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ToDo from "@/components/To-Do_List/ToDo";
-import ProjectHeader from "@/components/common/ProjectHeader";
+import DynamicTaskClient from "@/components/studio/DynamicTaskClient";
 
 export const metadata: Metadata = {
   title: "To-Do List (CRUD) — Junior SDE-1 React Challenge",
@@ -21,18 +21,8 @@ export const metadata: Metadata = {
 
 export default function TodoListPage() {
   return (
-    <div className="w-full space-y-6">
-      <ProjectHeader
-        title="To-Do List (CRUD Operations)"
-        description="Create, read, update, and delete tasks with status categories (Upcoming, In Progress, Completed, Deleted) and localStorage persistence."
-        level="beginner"
-        category="Productivity"
-        concepts={["Array in State (filter/map)", "localStorage Persistence", "Form Submission", "Dynamic IDs"]}
-        estimatedMinutes={30}
-      />
-      <div className="w-full py-4">
-        <ToDo />
-      </div>
-    </div>
+    <DynamicTaskClient slug="todo-list">
+      <ToDo />
+    </DynamicTaskClient>
   );
 }

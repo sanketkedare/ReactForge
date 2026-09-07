@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ImageSlider from "@/components/Image_Slider/ImageSlider";
-import ProjectHeader from "@/components/common/ProjectHeader";
+import DynamicTaskClient from "@/components/studio/DynamicTaskClient";
 
 export const metadata: Metadata = {
   title: "Image Carousel Slider — Junior SDE-1 React Challenge",
@@ -21,18 +21,8 @@ export const metadata: Metadata = {
 
 export default function ImageSliderPage() {
   return (
-    <div className="w-full space-y-6">
-      <ProjectHeader
-        title="Image Carousel Slider"
-        description="Smooth sliding carousel with next/previous buttons, active thumbnail dots, and auto-play interval with hover pause."
-        level="beginner"
-        category="Media & Animation"
-        concepts={["useEffect Timers", "Index Wrapping (% length)", "Framer Motion Transitions"]}
-        estimatedMinutes={25}
-      />
-      <div className="w-full flex justify-center py-4">
-        <ImageSlider />
-      </div>
-    </div>
+    <DynamicTaskClient slug="image-slider">
+      <ImageSlider />
+    </DynamicTaskClient>
   );
 }

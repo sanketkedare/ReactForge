@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Comment from "@/components/Comment_Section/Comment";
-import ProjectHeader from "@/components/common/ProjectHeader";
+import DynamicTaskClient from "@/components/studio/DynamicTaskClient";
 
 export const metadata: Metadata = {
   title: "Nested Comment System — Mid-Level SDE-2 React Challenge",
@@ -21,18 +21,10 @@ export const metadata: Metadata = {
 
 export default function CommentSectionPage() {
   return (
-    <div className="w-full space-y-6">
-      <ProjectHeader
-        title="Interactive Comment System"
-        description="Multi-user commenting platform with user profile switching, article reading, likes/dislikes counters, and reply nesting."
-        level="intermediate"
-        category="Social & Nesting"
-        concepts={["Context Switching", "Nested Array Mutations", "Upvoting Heuristics"]}
-        estimatedMinutes={35}
-      />
+    <DynamicTaskClient slug="comment-section">
       <div className="w-full py-4">
         <Comment />
       </div>
-    </div>
+    </DynamicTaskClient>
   );
 }

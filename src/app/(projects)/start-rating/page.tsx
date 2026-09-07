@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import StartRating from "@/components/Start_Rating/StartRating";
-import ProjectHeader from "@/components/common/ProjectHeader";
+import DynamicTaskClient from "@/components/studio/DynamicTaskClient";
 
 export const metadata: Metadata = {
   title: "Star Rating Component — Junior SDE-1 React Challenge",
@@ -21,18 +21,10 @@ export const metadata: Metadata = {
 
 export default function StartRatingPage() {
   return (
-    <div className="w-full space-y-6">
-      <ProjectHeader
-        title="Star Rating Component"
-        description="Interactive rating widget updating star fill highlights on mouse hover and persisting score selection with mood feedback."
-        level="beginner"
-        category="UI Components"
-        concepts={["Hover State (onMouseEnter/Leave)", "Conditional CSS Classes", "Custom SVGs"]}
-        estimatedMinutes={15}
-      />
+    <DynamicTaskClient slug="star-rating">
       <div className="w-full flex justify-center py-4">
         <StartRating />
       </div>
-    </div>
+    </DynamicTaskClient>
   );
 }

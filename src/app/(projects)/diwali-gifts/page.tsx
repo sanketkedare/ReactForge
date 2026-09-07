@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import DiwaliGifts from "@/components/Diwali_Gifts/DiwaliGifts";
-import ProjectHeader from "@/components/common/ProjectHeader";
+import DynamicTaskClient from "@/components/studio/DynamicTaskClient";
 
 export const metadata: Metadata = {
   title: "Diwali Gift Shuffler & Allocator — Mid-Level SDE-2 React Challenge",
@@ -21,18 +21,10 @@ export const metadata: Metadata = {
 
 export default function DiwaliGiftsPage() {
   return (
-    <div className="w-full space-y-6">
-      <ProjectHeader
-        title="Diwali Gift Shuffler & Allocator"
-        description="Dynamic gift distribution system with person addition, randomized Fisher-Yates array shuffling algorithms, and allocation table generation."
-        level="intermediate"
-        category="Algorithms & State"
-        concepts={["Fisher-Yates Shuffle Algorithm", "Dynamic Table Mapping", "Array Transformations"]}
-        estimatedMinutes={30}
-      />
+    <DynamicTaskClient slug="diwali-gifts">
       <div className="w-full py-4">
         <DiwaliGifts />
       </div>
-    </div>
+    </DynamicTaskClient>
   );
 }

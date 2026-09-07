@@ -1,5 +1,14 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+export interface ITaskSubmission {
+  taskId: string;
+  score: number;
+  passed: boolean;
+  code: string;
+  feedback?: string;
+  evaluatedAt: Date;
+}
+
 export interface IUser extends Document {
   uid: string;
   email: string;
@@ -16,6 +25,7 @@ export interface IUser extends Document {
   linkedinUrl?: string;
   portfolioUrl?: string;
   completedTasks: string[];
+  taskSubmissions?: ITaskSubmission[];
   bookmarkedTasks: string[];
   streak: {
     current: number;
@@ -109,6 +119,16 @@ const UserSchema = new Schema<IUser>(
       type: [String],
       default: [],
     },
+    taskSubmissions: [
+      {
+        taskId: { type: String, required: true },
+        score: { type: Number, default: 10 },
+        passed: { type: Boolean, default: true },
+        code: { type: String, default: "" },
+        feedback: { type: String, default: "" },
+        evaluatedAt: { type: Date, default: Date.now },
+      },
+    ],
     bookmarkedTasks: {
       type: [String],
       default: [],

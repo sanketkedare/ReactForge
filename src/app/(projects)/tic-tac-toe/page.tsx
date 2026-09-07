@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import TicTacToe from "@/components/Tic_Tac_Toe/TicTacToe";
-import ProjectHeader from "@/components/common/ProjectHeader";
+import DynamicTaskClient from "@/components/studio/DynamicTaskClient";
 
 export const metadata: Metadata = {
   title: "Tic Tac Toe (Tiger vs Eagle) — Junior SDE-1 React Challenge",
@@ -21,18 +21,10 @@ export const metadata: Metadata = {
 
 export default function TicTacToePage() {
   return (
-    <div className="w-full space-y-6">
-      <ProjectHeader
-        title="Tic Tac Toe Game (Tiger vs Eagle)"
-        description="Classic two-player grid game calculating win conditions across rows, columns, and diagonals with turn history and restart logic."
-        level="beginner"
-        category="Game Logic"
-        concepts={["2D Grid State", "Win Matrix Calculation", "Turn Switching", "Reset Logic"]}
-        estimatedMinutes={25}
-      />
+    <DynamicTaskClient slug="tic-tac-toe">
       <div className="w-full flex justify-center py-4">
         <TicTacToe />
       </div>
-    </div>
+    </DynamicTaskClient>
   );
 }
