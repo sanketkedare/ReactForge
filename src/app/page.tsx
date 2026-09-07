@@ -14,6 +14,12 @@ import {
   Sparkles,
   Trophy,
   BookOpen,
+  AlertTriangle,
+  Code2,
+  Cpu,
+  Activity,
+  ShieldCheck,
+  Layers,
 } from "lucide-react";
 import { SiJavascript, SiReact } from "react-icons/si";
 import StudioNav from "@/components/studio/StudioNav";
@@ -294,6 +300,141 @@ export default function CleanStudentHomePage() {
 
         {/* Content Appearing After Scrolling */}
         <div className="space-y-32 pt-20">
+          {/* =========================================================================
+              FLAGSHIP: SENIOR ENGINEERING LABORATORIES
+             ========================================================================= */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full space-y-8"
+          >
+            <div className="text-center space-y-2">
+              <span className="text-xs uppercase tracking-widest font-sans font-semibold text-amber-400 flex items-center justify-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Enterprise Engineering Suite</span>
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-normal text-amber-50">
+                Interactive Senior Laboratories
+              </h2>
+              <p className="text-xs sm:text-sm font-sans text-slate-400 font-light max-w-xl mx-auto">
+                Explore dedicated production-grade environments designed to simulate high-scale performance, real outage postmortems, and isolated code execution.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
+              {/* Card 1: Performance Lab */}
+              <Link href="/performance" className="group block">
+                <div className="h-full rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-[#0c1310]/90 to-[#07090e]/95 p-6 backdrop-blur-xl shadow-xl transition-all duration-300 hover:border-emerald-400/60 hover:-translate-y-1 hover:shadow-emerald-500/10 flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                        <Zap className="w-6 h-6" />
+                      </div>
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-950/50 text-emerald-300">
+                        TELEMETRY & HUD
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                        Performance & Profiler Lab
+                      </h3>
+                      <p className="text-xs text-slate-400 font-light mt-1.5 leading-relaxed">
+                        Benchmark 10,000 DOM rows in real-time (virtualized vs non-virtualized 60fps), inspect live Web Vitals (LCP/CLS/INP), and analyze React render trees.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">10k Rows</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Web Vitals HUD</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Flame Profiler</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 flex items-center gap-1.5 text-xs font-semibold text-emerald-400 group-hover:translate-x-1 transition-transform">
+                    <span>Launch Performance Lab</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* Card 2: Incident Simulator */}
+              <Link href="/incidents" className="group block">
+                <div className="h-full rounded-2xl border border-rose-500/30 bg-gradient-to-b from-[#140c0e]/90 to-[#07090e]/95 p-6 backdrop-blur-xl shadow-xl transition-all duration-300 hover:border-rose-400/60 hover:-translate-y-1 hover:shadow-rose-500/10 flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-rose-950/80 border border-rose-500/40 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+                        <AlertTriangle className="w-6 h-6" />
+                      </div>
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-rose-500/40 bg-rose-950/50 text-rose-300">
+                        8 POSTMORTEMS
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-rose-300 transition-colors">
+                        Production Incident Simulator
+                      </h3>
+                      <p className="text-xs text-slate-400 font-light mt-1.5 leading-relaxed">
+                        Interactive side-by-side execution of real-world production outages: memory leaks, hydration mismatches, debounce race conditions, and infinite render loops.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Live Diffs</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Race Conditions</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Hydration Mismatch</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 flex items-center gap-1.5 text-xs font-semibold text-rose-400 group-hover:translate-x-1 transition-transform">
+                    <span>Explore Incident Postmortems</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* Card 3: Live Playground */}
+              <Link href="/playground" className="group block">
+                <div className="h-full rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-[#0c0e18]/90 to-[#07090e]/95 p-6 backdrop-blur-xl shadow-xl transition-all duration-300 hover:border-indigo-400/60 hover:-translate-y-1 hover:shadow-indigo-500/10 flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-indigo-950/80 border border-indigo-500/40 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                        <Code2 className="w-6 h-6" />
+                      </div>
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-indigo-500/40 bg-indigo-950/50 text-indigo-300">
+                        ISOLATED RUNTIME
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">
+                        Live React 19 Playground
+                      </h3>
+                      <p className="text-xs text-slate-400 font-light mt-1.5 leading-relaxed">
+                        Interactive browser sandbox with instant hot reload, real-time streamed console logging, and live accessibility (A11y) tree verification.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Iframe Sandbox</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Console Stream</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">A11y Inspector</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 flex items-center gap-1.5 text-xs font-semibold text-indigo-400 group-hover:translate-x-1 transition-transform">
+                    <span>Open Live Code Sandbox</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </motion.section>
+
           {/* =========================================================================
               SECTION 1: THE LEARNING ROADMAP (Connected Stepper Circuit Pipeline)
              ========================================================================= */}

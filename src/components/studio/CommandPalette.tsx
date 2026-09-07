@@ -10,6 +10,65 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { LEARNING_PROJECTS } from "@/data/learningProjects";
 
+interface SearchableItem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  path: string;
+  icon: string | React.ReactNode;
+  levelColor: string;
+  levelLabel: string;
+  skills?: string[];
+}
+
+const STUDIO_LABS: SearchableItem[] = [
+  {
+    id: "lab-performance",
+    title: "⚡ Performance & Profiler Lab",
+    description: "10k-Row Virtualization benchmark, React Tree Profiler & live Web Vitals HUD",
+    category: "Studio Lab",
+    path: "/performance",
+    icon: "⚡",
+    levelColor: "border-emerald-500/50 text-emerald-400 bg-emerald-950/30",
+    levelLabel: "Enterprise Lab",
+    skills: ["Virtualization", "Performance", "Web Vitals", "Profiler"],
+  },
+  {
+    id: "lab-incidents",
+    title: "🚨 Production Incident Simulator",
+    description: "8 interactive postmortems (Memory leaks, hydration mismatch, race conditions)",
+    category: "Studio Lab",
+    path: "/incidents",
+    icon: "🚨",
+    levelColor: "border-rose-500/50 text-rose-400 bg-rose-950/30",
+    levelLabel: "Postmortems",
+    skills: ["Debugging", "Memory Leaks", "Hydration", "Race Conditions"],
+  },
+  {
+    id: "lab-playground",
+    title: "📝 Live React 19 Playground",
+    description: "Interactive code editor with isolated sandbox runner, Console & A11y HUD",
+    category: "Studio Lab",
+    path: "/playground",
+    icon: "📝",
+    levelColor: "border-indigo-500/50 text-indigo-400 bg-indigo-950/30",
+    levelLabel: "Sandbox",
+    skills: ["Live Editor", "Iframe Sandbox", "Accessibility", "A11y"],
+  },
+  {
+    id: "lab-case-study",
+    title: "📄 Architectural Case Study",
+    description: "Deep dive into the 10-year senior frontend engineering transformation",
+    category: "Studio Lab",
+    path: "/case-study",
+    icon: "📄",
+    levelColor: "border-purple-500/50 text-purple-400 bg-purple-950/30",
+    levelLabel: "Architecture",
+    skills: ["System Design", "ADR", "Testing", "Case Study"],
+  },
+];
+
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,12 +82,27 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [query, setQuery] = useState<string>("");
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const filtered = LEARNING_PROJECTS.filter(
+  const allItems: SearchableItem[] = [
+    ...STUDIO_LABS,
+    ...LEARNING_PROJECTS.map((p) => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      category: p.category,
+      path: p.path,
+      icon: p.icon,
+      levelColor: p.levelColor,
+      levelLabel: p.levelLabel,
+      skills: p.skills,
+    })),
+  ];
+
+  const filtered = allItems.filter(
     (item) =>
       item.title.toLowerCase().includes(query.toLowerCase()) ||
       item.description.toLowerCase().includes(query.toLowerCase()) ||
       item.category.toLowerCase().includes(query.toLowerCase()) ||
-      item.skills.some((s) => s.toLowerCase().includes(query.toLowerCase()))
+      item.skills?.some((s) => s.toLowerCase().includes(query.toLowerCase()))
   );
 
   useEffect(() => {

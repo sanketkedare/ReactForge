@@ -4,7 +4,16 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, Github, BookOpen, Layers, Sparkles } from "lucide-react";
+import {
+  Search,
+  Github,
+  BookOpen,
+  Layers,
+  Sparkles,
+  Zap,
+  AlertTriangle,
+  Code2,
+} from "lucide-react";
 import CommandPalette from "./CommandPalette";
 import { LEARNING_PROJECTS } from "@/data/learningProjects";
 import UserMenu from "@/components/auth/UserMenu";
@@ -94,39 +103,76 @@ export const StudioNav: React.FC = () => {
           </div>
 
           {/* Center: Quick Links */}
-          <nav className="hidden md:flex items-center gap-6 font-sans text-xs text-slate-300 font-medium">
+          <nav className="hidden lg:flex items-center gap-2 font-sans text-xs font-medium">
             <Link
               href="/"
-              className="py-1 px-3 rounded-full hover:text-white hover:bg-slate-800/40 transition-colors"
+              className={`py-1.5 px-3 rounded-full transition-colors ${
+                pathname === "/"
+                  ? "text-amber-400 bg-slate-800/80 font-bold"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/40"
+              }`}
             >
-              Home Overview
-            </Link>
-
-            <Link
-              href="/#learning-flow"
-              className="py-1 px-3 rounded-full hover:text-white hover:bg-slate-800/40 transition-colors"
-            >
-              Roadmap
-            </Link>
-
-            <Link
-              href="/#ai-coach"
-              className="py-1 px-3 rounded-full hover:text-amber-300 hover:bg-slate-800/40 transition-colors flex items-center gap-1"
-            >
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>AI Coach</span>
+              Overview
             </Link>
 
             <Link
               href="/tasks"
-              className={`py-1 px-3.5 rounded-full transition-all flex items-center gap-1.5 ${
+              className={`py-1.5 px-3 rounded-full transition-all flex items-center gap-1.5 ${
                 pathname === "/tasks" || pathname === "/projects"
                   ? "bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-400/20"
-                  : "text-amber-300 hover:text-white hover:bg-slate-800/60"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/40"
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span>All 100 Tasks</span>
+              <span>100 Tasks</span>
+            </Link>
+
+            <Link
+              href="/performance"
+              className={`py-1.5 px-3 rounded-full transition-all flex items-center gap-1.5 ${
+                pathname === "/performance"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold"
+                  : "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/40"
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Performance</span>
+            </Link>
+
+            <Link
+              href="/incidents"
+              className={`py-1.5 px-3 rounded-full transition-all flex items-center gap-1.5 ${
+                pathname === "/incidents"
+                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold"
+                  : "text-rose-400 hover:text-rose-300 hover:bg-rose-950/40"
+              }`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+              <span>Incidents</span>
+            </Link>
+
+            <Link
+              href="/playground"
+              className={`py-1.5 px-3 rounded-full transition-all flex items-center gap-1.5 ${
+                pathname === "/playground"
+                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold"
+                  : "text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40"
+              }`}
+            >
+              <Code2 className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Playground</span>
+            </Link>
+
+            <Link
+              href="/case-study"
+              className={`py-1.5 px-3 rounded-full transition-all flex items-center gap-1.5 ${
+                pathname === "/case-study"
+                  ? "bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold"
+                  : "text-purple-300 hover:text-purple-200 hover:bg-purple-950/40"
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 text-purple-400" />
+              <span>Case Study</span>
             </Link>
           </nav>
 
@@ -209,40 +255,56 @@ export const StudioNav: React.FC = () => {
           </div>
 
           {/* Center: Navigation Links */}
-          <nav className="hidden md:flex items-center justify-center gap-6 font-sans text-xs text-slate-300 font-medium">
-            <Link
-              href="/#hero"
-              onClick={(e) => scrollToSection(e, "hero")}
-              className="py-1 px-3 rounded-full hover:text-white hover:bg-slate-800/40 transition-all hover:scale-105"
-            >
-              Overview
-            </Link>
-
+          <nav className="hidden lg:flex items-center justify-center gap-1.5 font-sans text-xs text-slate-300 font-medium">
             <Link
               href="/#learning-flow"
               onClick={(e) => scrollToSection(e, "learning-flow")}
-              className="py-1 px-3 rounded-full hover:text-white hover:bg-slate-800/40 transition-all hover:scale-105"
+              className="py-1 px-2.5 rounded-full hover:text-white hover:bg-slate-800/40 transition-all hover:scale-105"
             >
               Roadmap
             </Link>
 
             <Link
-              href="/#ai-coach"
-              onClick={(e) => scrollToSection(e, "ai-coach")}
-              className="py-1 px-3 rounded-full hover:text-amber-300 hover:bg-slate-800/40 transition-all hover:scale-105 flex items-center gap-1"
+              href="/performance"
+              className="py-1 px-2.5 rounded-full text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/40 transition-all hover:scale-105 flex items-center gap-1 font-semibold"
             >
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>AI Coach</span>
+              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Performance</span>
+            </Link>
+
+            <Link
+              href="/incidents"
+              className="py-1 px-2.5 rounded-full text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 transition-all hover:scale-105 flex items-center gap-1 font-semibold"
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+              <span>Incidents</span>
+            </Link>
+
+            <Link
+              href="/playground"
+              className="py-1 px-2.5 rounded-full text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40 transition-all hover:scale-105 flex items-center gap-1 font-semibold"
+            >
+              <Code2 className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Playground</span>
             </Link>
 
             <Link
               href="/tasks"
-              className="py-1 px-3.5 rounded-full transition-all hover:scale-105 flex items-center gap-1.5 text-amber-300 hover:text-white hover:bg-slate-800/60"
+              className="py-1 px-3 rounded-full transition-all hover:scale-105 flex items-center gap-1.5 text-amber-300 hover:text-white hover:bg-slate-800/60"
             >
-              <span>All Tasks</span>
+              <span>100 Tasks</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded-full font-mono border bg-slate-800 text-amber-300 border-slate-700">
                 {LEARNING_PROJECTS.length}
               </span>
+            </Link>
+
+            <Link
+              href="/#ai-coach"
+              onClick={(e) => scrollToSection(e, "ai-coach")}
+              className="py-1 px-2.5 rounded-full hover:text-amber-300 hover:bg-slate-800/40 transition-all hover:scale-105 flex items-center gap-1"
+            >
+              <Sparkles className="w-3 h-3 text-amber-400" />
+              <span>AI Coach</span>
             </Link>
           </nav>
 

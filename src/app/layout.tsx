@@ -12,16 +12,21 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://reactforge.sanketkedare.com"),
   title: {
-    default: "ReactForge — 100 Hands-On React Machine Coding Challenges",
+    default: "ReactForge — 100 React Challenges & Senior Frontend Engineering Lab",
     template: "%s | ReactForge",
   },
   description:
-    "Master frontend developer machine coding rounds with ReactForge. 100 practical hands-on tasks, live interactive workbenches, AI coaching, and interview dossiers architected by Sanket Kedare.",
+    "Master frontend developer machine coding rounds and senior engineering with ReactForge. 100 hands-on React 19 challenges, live virtualization benchmarks, production incident postmortems, sandboxed code playgrounds, and multi-model AI coaching.",
   keywords: [
     "React 19",
     "React Machine Coding",
     "Frontend System Design",
     "Machine Coding Interview",
+    "Performance Lab",
+    "Virtualization Benchmark",
+    "Web Vitals HUD",
+    "Frontend Incident Postmortems",
+    "React Code Sandbox",
     "SDE-1 Frontend Interview",
     "SDE-2 Frontend Interview",
     "SDE-3 Frontend Interview",
@@ -34,6 +39,7 @@ export const metadata: Metadata = {
     "DOM Reconciliation",
     "Virtual DOM",
     "State Management",
+    "WCAG Accessibility",
   ],
   authors: [{ name: "Sanket Kedare", url: "https://www.sanketkedare.com" }],
   creator: "Sanket Kedare",
@@ -54,9 +60,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://reactforge.sanketkedare.com",
     siteName: "ReactForge",
-    title: "ReactForge — 100 Hands-On React Machine Coding Challenges",
+    title: "ReactForge — 100 React Challenges & Senior Frontend Engineering Lab",
     description:
-      "Master frontend developer machine coding rounds with ReactForge. 100 practical hands-on tasks, live interactive workbenches, AI coaching, and interview dossiers architected by Sanket Kedare.",
+      "Master frontend developer machine coding rounds and senior engineering with ReactForge. 100 hands-on React 19 challenges, live virtualization benchmarks, production incident postmortems, sandboxed code playgrounds, and multi-model AI coaching.",
     images: [
       {
         url: "/ReactForge.png",

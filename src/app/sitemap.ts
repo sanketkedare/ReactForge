@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://reactforge.sanketkedare.com";
   const now = new Date();
 
-  // Root & Primary Index Pages
+  // Root, Flagship Labs & Primary Index Pages
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
@@ -17,6 +17,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/tasks`,
       lastModified: now,
       changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/performance`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/incidents`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/playground`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/case-study`,
+      lastModified: now,
+      changeFrequency: "weekly",
       priority: 0.9,
     },
   ];
